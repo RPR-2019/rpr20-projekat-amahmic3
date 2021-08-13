@@ -69,7 +69,7 @@
             </PasswordField>
          </children>
       </GridPane>
-      <Button fx:id="btnLogn" defaultButton="true" mnemonicParsing="false" text="%login" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <Button fx:id="btnLogin" onAction="#loginAction" defaultButton="true" mnemonicParsing="false" text="%login" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets bottom="15.0" top="15.0" />
          </GridPane.margin>

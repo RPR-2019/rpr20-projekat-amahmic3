@@ -2,16 +2,16 @@ package ba.unsa.etf.rpr.models;
 
 public class Korisnik {
     private int id;
-    private String ime,prezime,brojTelefona,email,adresaStanovanja;
+    private String ime,prezime,brojTelefona,email;
     private boolean administrator;
 
-    private Korisnik(int id, String ime, String prezime, String brojTelefona, String email, String adresaStanovanja, boolean administrator) {
+    public Korisnik(int id, String ime, String prezime, String brojTelefona, String email, boolean administrator) {
         this.id = id;
         this.ime = ime;
         this.prezime = prezime;
         this.brojTelefona = brojTelefona;
         this.email = email;
-        this.adresaStanovanja = adresaStanovanja;
+
         this.administrator = administrator;
     }
 
@@ -33,10 +33,6 @@ public class Korisnik {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getAdresaStanovanja() {
-        return adresaStanovanja;
     }
 
     public boolean isAdministrator() {
