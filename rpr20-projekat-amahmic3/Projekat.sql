@@ -5,9 +5,10 @@ CREATE TABLE IF NOT EXISTS "Korisnik" (
 	"password"	TEXT,
 	"ime"	TEXT,
 	"prezime"	TEXT,
-	"email"	INTEGER UNIQUE,
+	"email"	TEXT UNIQUE,
 	"brojTelefona"	TEXT UNIQUE,
 	"administrator"	INTEGER,
 	PRIMARY KEY("id")
 );
+INSERT INTO Korisnik(username,password) VALUES ("admin","admin");
 COMMIT;

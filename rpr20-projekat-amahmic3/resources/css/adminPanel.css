@@ -1,0 +1,9 @@
+.buttonHovered{
+    -fx-background-color: #B495EA;
+}
+.buttonNotSelected{
+    -fx-background-color: #EBE8F9;
+}
+.buttonSelected{
+    -fx-background-color: #9257FA;
+}
