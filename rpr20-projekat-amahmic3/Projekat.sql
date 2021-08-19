@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS "Korisnik" (
 	"administrator"	INTEGER,
 	PRIMARY KEY("id")
 );
-INSERT INTO Korisnik(username,password) VALUES ("admin","admin");
+INSERT INTO Korisnik(username,password,administrator) VALUES ("admin","admin",1);
 COMMIT;

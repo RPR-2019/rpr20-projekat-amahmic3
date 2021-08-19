@@ -4,6 +4,7 @@ import ba.unsa.etf.rpr.KorisnikDAO;
 import ba.unsa.etf.rpr.models.Korisnik;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -31,6 +32,7 @@ public class LoginController {
         }else{
             try {
                 uspjesanLogin(korisnik);
+                ( (Stage)((Node)actionEvent.getSource()).getScene().getWindow()).close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -42,7 +44,7 @@ public class LoginController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_panel.fxml"),bundle);
         loader.setController(new AdminController(korisnik));
         adminPanel.setTitle(bundle.getString("adminNaslov"));
-        adminPanel.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,400));
+        adminPanel.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,USE_COMPUTED_SIZE));
         adminPanel.show();
     }
 }

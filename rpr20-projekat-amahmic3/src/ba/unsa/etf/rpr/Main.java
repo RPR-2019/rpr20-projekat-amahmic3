@@ -17,7 +17,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         LoginController ctrl = new LoginController();
-        Locale.setDefault(new Locale("bs", "ba"));
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"),bundle);
         loader.setController(ctrl);

@@ -151,9 +151,9 @@
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </GridPane.margin>
             </ButtonBar>
-            <Button alignment="TOP_RIGHT" graphicTextGap="20.0" minWidth="111.0" mnemonicParsing="false" text="%create" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+            <Button fx:id="btnCreate" onAction="#openCreateWindow" alignment="TOP_RIGHT" graphicTextGap="20.0" minWidth="111.0" mnemonicParsing="false" text="%create" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                <graphic>
-                  <ImageView fx:id="btnCreate" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView  fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/plus.png" />
                      </image>
