@@ -2,11 +2,17 @@ package ba.unsa.etf.rpr.controllers;
 
 import ba.unsa.etf.rpr.KorisnikDAO;
 import ba.unsa.etf.rpr.models.Korisnik;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -23,14 +29,50 @@ public class AdminController {
     public GridPane inspektoriPane;
     public GridPane izvjestajiPane;
     public Button btnIzvjestaji;
+    public Button btnEdit;
+    public Button btnDelete;
     public AdminController(Korisnik korisnik){
         admin=korisnik;
+        inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
+        System.out.println(inspektori.size());
+    }
+    public TableView<Korisnik> tblInspektori;
+    public TableColumn<Korisnik,String> rowID;
+    public TableColumn<Korisnik,String> rowIme;
+    public TableColumn<Korisnik,String> rowPrezime;
+    public TableColumn<Korisnik,String> rowUsername;
+    public TableColumn<Korisnik,String> rowEmail;
+    private ObservableList<Korisnik> inspektori = FXCollections.observableArrayList();
+
+
+    public AdminController(){
+        inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
+        System.out.println(inspektori.size());
     }
     @FXML
     public void initialize(){
+        btnDelete.setDisable(true);
+        btnEdit.setDisable(true);
         odabraniButton = btnInspektori;
         izvjestajiPane.setVisible(false);
         inspektoriPane.setVisible(true);
+
+        rowID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        rowIme.setCellValueFactory(new PropertyValueFactory<>("ime"));
+        rowPrezime.setCellValueFactory(new PropertyValueFactory<>("prezime"));
+        rowEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        rowUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+        tblInspektori.setItems(inspektori);
+
+        tblInspektori.getSelectionModel().selectedItemProperty().addListener((obs,stari,novi)->{
+            if(novi==null){
+                btnDelete.setDisable(true);
+                btnEdit.setDisable(true);
+            }else{
+                btnEdit.setDisable(false);
+                btnDelete.setDisable(false);
+            }
+        });
     }
     public void obojiUlaz(MouseEvent actionEvent){
         Button btn = (Button)actionEvent.getSource();
@@ -72,6 +114,7 @@ public class AdminController {
             CreateKorisnikController kontroler = loader.getController();
             if(kontroler.isTrebaKreirati()){
                 KorisnikDAO.getInstance().kreirajInspektora(kontroler.getNoviKorisnik());
+                inspektori.add(kontroler.getNoviKorisnik());
             }
         });
     }

@@ -30,7 +30,7 @@
     <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <GridPane fx:id="izvjestajiPane" GridPane.columnIndex="1" GridPane.rowSpan="3">
+      <GridPane fx:id="izvjestajiPane" visible="false" GridPane.columnIndex="1" GridPane.rowSpan="3">
         <columnConstraints>
           <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
           <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
@@ -82,7 +82,7 @@
             </Button>
          </children>
       </GridPane>
-      <GridPane fx:id="inspektoriPane" visible="false" GridPane.columnIndex="1" GridPane.rowSpan="3">
+      <GridPane fx:id="inspektoriPane" GridPane.columnIndex="1" GridPane.rowSpan="3">
         <columnConstraints>
           <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
             <ColumnConstraints hgrow="ALWAYS" />
@@ -104,13 +104,13 @@
                   <Insets left="2.0" top="2.0" />
                </GridPane.margin>
             </Label>
-            <TableView GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
+            <TableView fx:id="tblInspektori" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2"  >
               <columns>
-                  <TableColumn minWidth="75.0" prefWidth="-1.0" text="ID" />
-                <TableColumn minWidth="75.0" prefWidth="-1.0" text="%ime" />
-                <TableColumn minWidth="75.0" prefWidth="-1.0" text="%prezime" />
-                  <TableColumn minWidth="75.0" prefWidth="-1.0" text="%username" />
-                  <TableColumn minWidth="50.0" prefWidth="-1.0" text="%email" />
+                  <TableColumn fx:id="rowID" minWidth="75.0" prefWidth="-1.0" text="ID" />
+                <TableColumn fx:id="rowIme" minWidth="75.0" prefWidth="-1.0" text="%ime" />
+                <TableColumn fx:id="rowPrezime" minWidth="75.0" prefWidth="-1.0" text="%prezime" />
+                  <TableColumn fx:id="rowUsername" minWidth="75.0" prefWidth="-1.0" text="%username" />
+                  <TableColumn fx:id="rowEmail" minWidth="50.0" prefWidth="-1.0" text="%email" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
@@ -137,9 +137,9 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button mnemonicParsing="false" text="%delete">
+                  <Button fx:id="btnDelete" mnemonicParsing="false" text="%delete">
                      <graphic>
-                        <ImageView fx:id="btnDelete" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/delete.png" />
                            </image>
@@ -151,9 +151,9 @@
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </GridPane.margin>
             </ButtonBar>
-            <Button fx:id="btnCreate" onAction="#openCreateWindow" alignment="TOP_RIGHT" graphicTextGap="20.0" minWidth="111.0" mnemonicParsing="false" text="%create" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+            <Button fx:id="btnCreate" alignment="TOP_RIGHT" graphicTextGap="20.0" minWidth="111.0" mnemonicParsing="false" onAction="#openCreateWindow" text="%create" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                <graphic>
-                  <ImageView  fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/plus.png" />
                      </image>
@@ -167,7 +167,7 @@
       </GridPane>
       <VBox prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #EBE8F9;" GridPane.rowSpan="3">
          <children>
-            <Button fx:id="btnInspektori" onAction="#prikaziInspektore" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" styleClass="buttonSelected" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0"  text="%inspektori" VBox.vgrow="NEVER">
+            <Button fx:id="btnInspektori" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onAction="#prikaziInspektore" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonSelected" text="%inspektori" VBox.vgrow="NEVER">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -179,7 +179,7 @@
                   <Insets left="50.0" />
                </padding>
             </Button>
-            <Button fx:id="btnIzvjestaji"  onAction="#prikaziIzvjestaje" alignment="BASELINE_LEFT" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" graphicTextGap="20.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%izvjestaji">
+            <Button fx:id="btnIzvjestaji" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onAction="#prikaziIzvjestaje" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%izvjestaji">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -191,7 +191,7 @@
                   <Insets left="50.0" />
                </padding>
             </Button>
-            <Button fx:id="btnOdjava" styleClass="buttonNotSelected" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0"  text="%odjava">
+            <Button fx:id="btnOdjava" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%odjava">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>

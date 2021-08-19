@@ -5,12 +5,13 @@ import ba.unsa.etf.rpr.models.Korisnik;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class KorisnikDAO {
     private Connection conn;
     private static KorisnikDAO instance;
-    private PreparedStatement korisnikUpit,usernameAvailableUpit,dodajInspektoraUpit;
+    private PreparedStatement korisnikUpit,usernameAvailableUpit,dodajInspektoraUpit,dajInspektoreUpit;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -22,6 +23,7 @@ public class KorisnikDAO {
         korisnikUpit = conn.prepareStatement("SELECT id,ime,prezime,brojTelefona,email,administrator FROM Korisnik WHERE username = ? AND password = ?");
         usernameAvailableUpit = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik WHERE username LIKE ?");
         dodajInspektoraUpit = conn.prepareStatement("INSERT INTO Korisnik(ime,prezime,email,brojTelefona,username,password,administrator) VALUES(?,?,?,?,?,?,0)");
+        dajInspektoreUpit = conn.prepareStatement("SELECT id,ime,prezime,brojTelefona,email,administrator,username,password FROM Korisnik WHERE administrator = 0");
     }
     private KorisnikDAO(){
         try {
@@ -104,5 +106,17 @@ public class KorisnikDAO {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public ArrayList<Korisnik> dajSveInspektore(){
+        ArrayList<Korisnik> povratnaLista = new ArrayList<>();
+        try {
+            ResultSet rs = dajInspektoreUpit.executeQuery();
+            while(rs.next()){
+                povratnaLista.add(new Korisnik(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),false,rs.getString(7),rs.getString(8)));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return povratnaLista;
     }
 }

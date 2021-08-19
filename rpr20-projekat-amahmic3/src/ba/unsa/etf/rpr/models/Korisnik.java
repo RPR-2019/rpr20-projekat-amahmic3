@@ -1,25 +1,28 @@
 package ba.unsa.etf.rpr.models;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Korisnik {
-    private int id;
+    private SimpleIntegerProperty id= new SimpleIntegerProperty(0);
     private SimpleStringProperty ime=new SimpleStringProperty("");
     private SimpleStringProperty prezime= new SimpleStringProperty("");
     private SimpleStringProperty brojTelefona = new SimpleStringProperty("");
     private SimpleStringProperty email = new SimpleStringProperty("");
     private SimpleStringProperty username = new SimpleStringProperty("");
     private SimpleStringProperty password = new SimpleStringProperty("");
-    private boolean administrator;
+    private SimpleBooleanProperty administrator= new SimpleBooleanProperty(false);
 
    public Korisnik(){
-       id=0;
+       id.setValue(0);
        ime.setValue("");
        prezime.setValue("");
        brojTelefona.setValue("");
        email.setValue("");
        username.setValue("");
        password.setValue("");
+       administrator.setValue(false);
    }
    public Korisnik(String ime,String prezime,String brojTelefona,String email,String username,String password){
        this.ime.setValue(ime);
@@ -39,13 +42,7 @@ public class Korisnik {
        setUsername(username);
        setPassword(password);
     }
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getIme() {
         return ime.get();
@@ -119,11 +116,27 @@ public class Korisnik {
         this.password.set(password);
     }
 
-    public void setAdministrator(boolean administrator) {
-        this.administrator = administrator;
+    public int getId() {
+        return id.get();
+    }
+
+    public SimpleIntegerProperty idProperty() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id.set(id);
     }
 
     public boolean isAdministrator() {
+        return administrator.get();
+    }
+
+    public SimpleBooleanProperty administratorProperty() {
         return administrator;
+    }
+
+    public void setAdministrator(boolean administrator) {
+        this.administrator.set(administrator);
     }
 }
