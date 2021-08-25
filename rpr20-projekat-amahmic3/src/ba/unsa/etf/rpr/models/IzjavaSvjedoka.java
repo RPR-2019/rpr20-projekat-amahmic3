@@ -6,18 +6,18 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class IzjavaSvjedoka {
     private SimpleIntegerProperty id;
-    private SimpleObjectProperty svjedok;
+    private Svjedok svjedok;
     private SimpleStringProperty tekstIzjave;
 
-    public IzjavaSvjedoka(int id, Svjedoci svjedok, String tekstIzjave) {
+    public IzjavaSvjedoka(int id, Svjedok svjedok, String tekstIzjave) {
         this.id = new SimpleIntegerProperty(id);
-        this.svjedok = new SimpleObjectProperty(svjedok);
+        this.svjedok = (svjedok);
         this.tekstIzjave = new SimpleStringProperty(tekstIzjave);
     }
 
     public IzjavaSvjedoka() {
         id = new SimpleIntegerProperty(0);
-        svjedok = new SimpleObjectProperty();
+        svjedok = new Svjedok();
         tekstIzjave = new SimpleStringProperty("");
     }
 
@@ -33,16 +33,12 @@ public class IzjavaSvjedoka {
         this.id.set(id);
     }
 
-    public Object getSvjedok() {
-        return svjedok.get();
-    }
-
-    public SimpleObjectProperty svjedokProperty() {
+    public Svjedok getSvjedok() {
         return svjedok;
     }
 
-    public void setSvjedok(Object svjedok) {
-        this.svjedok.set(svjedok);
+    public void setSvjedok(Svjedok svjedok) {
+        this.svjedok = svjedok;
     }
 
     public String getTekstIzjave() {

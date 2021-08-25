@@ -9,31 +9,56 @@ import java.util.ArrayList;
 
 public class Izvještaj {
     private SimpleIntegerProperty id;
-    private SimpleObjectProperty inspektor;
-    private SimpleObjectProperty obrazovnaInstitucija;
+    private Korisnik inspektor;
+    private ObrazovnaInstitucija obrazovnaInstitucija;
     private SimpleStringProperty tekstIzvještaja;
     private LocalDateTime datumIzvještaja;
-    private ArrayList<SimpleObjectProperty> izjaveSvjedoka;
+    private ArrayList<IzjavaSvjedoka> izjaveSvjedoka;
 
-    public Izvještaj(int id, int idInspektora, int idObrazovneInstitucije, String tekstIzvještaja, LocalDateTime datumIzvještaja, IzjavaSvjedoka[] izjaveSvjedoka) {
-        this.id = new SimpleIntegerProperty(id)
-        this.inspektor= new SimpleObjectProperty(idInspektora);
-        this.obrazovnaInstitucija = new SimpleObjectProperty( idObrazovneInstitucije);
+    public Izvještaj(int id, Korisnik inspektor, ObrazovnaInstitucija obrazovnaInstitucija, String tekstIzvještaja, LocalDateTime datumIzvještaja, IzjavaSvjedoka[] izjaveSvjedoka) {
+        this.id = new SimpleIntegerProperty(id);
+        this.inspektor= inspektor;
+        this.obrazovnaInstitucija = obrazovnaInstitucija;
         this.tekstIzvještaja = new SimpleStringProperty(tekstIzvještaja);
         this.datumIzvještaja = datumIzvještaja;
         this.izjaveSvjedoka= new ArrayList<>();
-        for(var izjavaSvjeoka:izjaveSvjedoka){
-            this.izjaveSvjedoka.add(new SimpleObjectProperty(izjavaSvjeoka));
+        for(var izjavaSvjedoka:izjaveSvjedoka){
+            this.izjaveSvjedoka.add(izjavaSvjedoka);
         }
     }
 
     public Izvještaj() {
         id = new SimpleIntegerProperty();
-        inspektor = new SimpleObjectProperty();
-        obrazovnaInstitucija= new SimpleObjectProperty();
+        obrazovnaInstitucija= new ObrazovnaInstitucija();
         tekstIzvještaja = new SimpleStringProperty();
         datumIzvještaja = LocalDateTime.now();
         izjaveSvjedoka = new ArrayList<>();
+        izjaveSvjedoka.add(new IzjavaSvjedoka());
+        izjaveSvjedoka.add(new IzjavaSvjedoka());
+    }
+
+    public Korisnik getInspektor() {
+        return inspektor;
+    }
+
+    public void setInspektor(Korisnik inspektor) {
+        this.inspektor = inspektor;
+    }
+
+    public ObrazovnaInstitucija getObrazovnaInstitucija() {
+        return obrazovnaInstitucija;
+    }
+
+    public void setObrazovnaInstitucija(ObrazovnaInstitucija obrazovnaInstitucija) {
+        this.obrazovnaInstitucija = obrazovnaInstitucija;
+    }
+
+    public ArrayList<IzjavaSvjedoka> getIzjaveSvjedoka() {
+        return izjaveSvjedoka;
+    }
+
+    public void setIzjaveSvjedoka(ArrayList<IzjavaSvjedoka> izjaveSvjedoka) {
+        this.izjaveSvjedoka = izjaveSvjedoka;
     }
 
     public int getId() {
@@ -48,29 +73,6 @@ public class Izvještaj {
         this.id.set(id);
     }
 
-    public Object getInspektor() {
-        return inspektor.get();
-    }
-
-    public SimpleObjectProperty inspektorProperty() {
-        return inspektor;
-    }
-
-    public void setInspektor(Object inspektor) {
-        this.inspektor.set(inspektor);
-    }
-
-    public Object getObrazovnaInstitucija() {
-        return obrazovnaInstitucija.get();
-    }
-
-    public SimpleObjectProperty obrazovnaInstitucijaProperty() {
-        return obrazovnaInstitucija;
-    }
-
-    public void setObrazovnaInstitucija(Object obrazovnaInstitucija) {
-        this.obrazovnaInstitucija.set(obrazovnaInstitucija);
-    }
 
     public String getTekstIzvještaja() {
         return tekstIzvještaja.get();
@@ -91,12 +93,11 @@ public class Izvještaj {
     public void setDatumIzvještaja(LocalDateTime datumIzvještaja) {
         this.datumIzvještaja = datumIzvještaja;
     }
-
-    public ArrayList<SimpleObjectProperty> getIzjaveSvjedoka() {
-        return izjaveSvjedoka;
+    public IzjavaSvjedoka getPrvi(){
+        return izjaveSvjedoka.get(0);
+    }
+    public IzjavaSvjedoka getDrugi(){
+        return izjaveSvjedoka.get(1);
     }
 
-    public void setIzjaveSvjedoka(ArrayList<SimpleObjectProperty> izjaveSvjedoka) {
-        this.izjaveSvjedoka = izjaveSvjedoka;
-    }
 }

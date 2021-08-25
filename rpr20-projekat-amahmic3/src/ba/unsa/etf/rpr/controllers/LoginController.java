@@ -39,12 +39,19 @@ public class LoginController {
         }
     }
     private void uspjesanLogin(Korisnik korisnik) throws IOException {
-        Stage adminPanel = new Stage();
+        Stage panel = new Stage();
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_panel.fxml"),bundle);
-        loader.setController(new AdminController(korisnik));
-        adminPanel.setTitle(bundle.getString("adminNaslov"));
-        adminPanel.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,USE_COMPUTED_SIZE));
-        adminPanel.show();
+        FXMLLoader loader;
+        if(korisnik.isAdministrator()) {
+            loader= new FXMLLoader(getClass().getResource("/fxml/admin_panel.fxml"), bundle);
+            loader.setController(new AdminController(korisnik));
+            panel.setTitle(bundle.getString("adminNaslov"));
+        }else{
+            loader = new FXMLLoader(getClass().getResource("/fxml/inspektor_panel.fxml"),bundle);
+            loader.setController(new InspektorKontroler(korisnik));
+            panel.setTitle(bundle.getString("inspektorNaslov"));
+        }
+        panel.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,USE_COMPUTED_SIZE));
+        panel.show();
     }
 }

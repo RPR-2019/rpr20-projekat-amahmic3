@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class ObrazovnaInstitucija {
     private SimpleIntegerProperty id;
-    private SimpleStringProperty naziv,adresa,brojTelefona,email,postanskiBroj;
+    private SimpleStringProperty naziv,adresa,brojTelefona,postanskiBroj;
 
     public ObrazovnaInstitucija(int id, String naziv, String adresa, String brojTelefona, String postanskiBroj) {
         this.id = new SimpleIntegerProperty(id);
@@ -13,6 +13,14 @@ public class ObrazovnaInstitucija {
         this.adresa = new SimpleStringProperty(adresa);
         this.brojTelefona = new SimpleStringProperty(brojTelefona);
         this.postanskiBroj = new SimpleStringProperty(postanskiBroj);
+    }
+
+    public ObrazovnaInstitucija() {
+        id= new SimpleIntegerProperty();
+        naziv=new SimpleStringProperty();
+        adresa=new SimpleStringProperty();
+        brojTelefona=new SimpleStringProperty();
+        postanskiBroj = new SimpleStringProperty();
     }
 
     public int getId() {
@@ -63,18 +71,6 @@ public class ObrazovnaInstitucija {
         this.brojTelefona.set(brojTelefona);
     }
 
-    public String getEmail() {
-        return email.get();
-    }
-
-    public SimpleStringProperty emailProperty() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
-
     public String getPostanskiBroj() {
         return postanskiBroj.get();
     }
@@ -86,4 +82,6 @@ public class ObrazovnaInstitucija {
     public void setPostanskiBroj(String postanskiBroj) {
         this.postanskiBroj.set(postanskiBroj);
     }
+
+
 }

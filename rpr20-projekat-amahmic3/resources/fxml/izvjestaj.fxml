@@ -93,7 +93,7 @@
                </TextField>
            </children>
        </GridPane>
-      <Label text="%obrazovnaInstutucija">
+      <Label text="%obrazovnaInstitucija">
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>

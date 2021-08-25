@@ -50,13 +50,24 @@ public class CreateKorisnikController {
         validacijskiListener(fldEmail,s -> !validirajEmail(s));
         validacijskiListener(fldBrojTelefona, s -> !validirajTelefon(s));
         validacijskiListener(fldUsername,s->!validirajUsername(s));
-        validacijskiListener(fldPassword,String::isEmpty);
+        fldPassword.textProperty().addListener((obs,oldState,newState)->{
+           if(newState.isEmpty()){
+               fldPassword.getStyleClass().removeAll("poljeIspravno");
+               fldPassword.getStyleClass().add("poljeNijeIspravno");
+               btnCreate.setDisable(true);
+           }else {
+               fldPassword.getStyleClass().removeAll("poljeNijeIspravno");
+               fldPassword.getStyleClass().add("poljeIspravno");
+               if(btnCreate.isDisabled()&&sviValidni()) btnCreate.setDisable(false);
+           }
+        });
         btnCreate.setDisable(true);
     }
     private void onChangeListener(TextField textField){
         textField.textProperty().addListener((obs,novo,staro)->{
             textField.getStyleClass().removeAll("poljeIspravno");
             textField.getStyleClass().removeAll("poljeNijeIspravno");
+            btnCreate.setDisable(true);
         });
     }
     public boolean validirajUsername(String username){
