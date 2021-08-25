@@ -115,4 +115,8 @@ public class CreateKorisnikController {
         return noviKorisnik;
     }
 
+    public void cancelKreiranje(ActionEvent actionEvent){
+        ((Stage)rootPane.getScene().getWindow()).close();
+    }
+
 }

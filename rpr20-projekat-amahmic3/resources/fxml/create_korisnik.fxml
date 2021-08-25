@@ -104,7 +104,7 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
         <buttons>
           <Button fx:id="btnCreate" onAction="#kreirajKorisnika" defaultButton="true" mnemonicParsing="false" text="%create" />
-            <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" text="%cancel" />
+            <Button fx:id="btnCancel" onAction="#cancelKreiranje" cancelButton="true" mnemonicParsing="false" text="%cancel" />
         </buttons>
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

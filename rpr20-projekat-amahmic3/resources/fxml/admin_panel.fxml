@@ -4,6 +4,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -30,10 +32,11 @@
     <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <GridPane fx:id="izvjestajiPane" visible="false" GridPane.columnIndex="1" GridPane.rowSpan="3">
+      <GridPane fx:id="izvjestajiPane" hgap="4.0" vgap="4.0" GridPane.columnIndex="1" GridPane.rowSpan="3">
         <columnConstraints>
-          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
-          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+          <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" />
+          <ColumnConstraints hgrow="ALWAYS" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="15.0" vgrow="SOMETIMES" />
@@ -51,7 +54,7 @@
                   <Insets left="2.0" top="2.0" />
                </GridPane.margin>
             </Label>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
+            <TableView GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
               <columns>
                 <TableColumn prefWidth="75.0" text="ID" />
                 <TableColumn prefWidth="75.0" text="%obrazovnaInstitucija" />
@@ -62,13 +65,13 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </TableView>
-            <Label text="%filter" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+            <Label text="%filter" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
-                  <Insets left="4.0" right="4.0" />
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </Label>
-            <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" text="%open" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+            <TextField maxHeight="-Infinity" maxWidth="1000000.0" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+            <Button mnemonicParsing="false" text="%open" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -80,9 +83,15 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </Button>
+            <ChoiceBox fx:id="chBoxIzvjestaji" maxWidth="150.0" minWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+            <DatePicker visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </GridPane.margin>
+            </DatePicker>
          </children>
       </GridPane>
-      <GridPane fx:id="inspektoriPane" GridPane.columnIndex="1" GridPane.rowSpan="3">
+      <GridPane fx:id="inspektoriPane" hgap="4.0" vgap="4.0" visible="false" GridPane.columnIndex="1" GridPane.rowSpan="3">
         <columnConstraints>
           <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
             <ColumnConstraints hgrow="ALWAYS" />
@@ -104,7 +113,7 @@
                   <Insets left="2.0" top="2.0" />
                </GridPane.margin>
             </Label>
-            <TableView fx:id="tblInspektori" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2"  >
+            <TableView fx:id="tblInspektori" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
               <columns>
                   <TableColumn fx:id="rowID" minWidth="75.0" prefWidth="-1.0" text="ID" />
                 <TableColumn fx:id="rowIme" minWidth="75.0" prefWidth="-1.0" text="%ime" />
@@ -116,12 +125,12 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </TableView>
-            <TextField alignment="TOP_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField alignment="TOP_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
-                  <Insets bottom="8.0" />
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </TextField>
-            <Label text="%filter" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Label text="%filter" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
@@ -151,7 +160,7 @@
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </GridPane.margin>
             </ButtonBar>
-            <Button fx:id="btnCreate" alignment="TOP_RIGHT" graphicTextGap="20.0" minWidth="111.0" mnemonicParsing="false" onAction="#openCreateWindow" text="%create" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+            <Button fx:id="btnCreate" alignment="TOP_RIGHT" graphicTextGap="20.0" minWidth="111.0" mnemonicParsing="false" onAction="#openCreateWindow" text="%create" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -160,9 +169,14 @@
                   </ImageView>
                </graphic>
                <GridPane.margin>
-                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                  <Insets bottom="8.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </Button>
+            <ChoiceBox maxWidth="100.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </GridPane.margin>
+            </ChoiceBox>
          </children>
       </GridPane>
       <VBox prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #EBE8F9;" GridPane.rowSpan="3">
