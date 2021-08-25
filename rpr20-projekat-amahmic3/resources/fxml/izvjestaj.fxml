@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16">
+<GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" />
     <ColumnConstraints halignment="CENTER" hgrow="NEVER" />
@@ -21,8 +21,9 @@
   </columnConstraints>
   <rowConstraints>
     <RowConstraints valignment="CENTER" vgrow="NEVER" />
+    <RowConstraints valignment="CENTER" vgrow="NEVER" />
     <RowConstraints vgrow="NEVER" />
-    <RowConstraints vgrow="NEVER" />
+      <RowConstraints vgrow="NEVER" />
       <RowConstraints minHeight="-Infinity" valignment="CENTER" vgrow="NEVER" />
       <RowConstraints vgrow="ALWAYS" />
       <RowConstraints vgrow="ALWAYS" />
@@ -34,69 +35,86 @@
       <RowConstraints vgrow="NEVER" />
   </rowConstraints>
    <children>
+       <GridPane GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
+           <columnConstraints>
+               <ColumnConstraints hgrow="SOMETIMES" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" />
+           </columnConstraints>
+           <rowConstraints>
+               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               <RowConstraints vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               <RowConstraints vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+           <children>
+               <Label text="%nazivInstitucije">
+                   <GridPane.margin>
+                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                   </GridPane.margin>
+               </Label>
+               <Label text="%brojTelefona" GridPane.columnIndex="1">
+                   <GridPane.margin>
+                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                   </GridPane.margin>
+               </Label>
+               <Label text="%adresaInstitucije" GridPane.rowIndex="2">
+                   <GridPane.margin>
+                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                   </GridPane.margin>
+               </Label>
+               <Label text="%postanskiBroj" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                   <GridPane.margin>
+                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                   </GridPane.margin>
+               </Label>
+               <TextField fx:id="fldNazivInstitucije" GridPane.rowIndex="1">
+                   <GridPane.margin>
+                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                   </GridPane.margin>
+                   <contextMenu>
+                       <ContextMenu fx:id="fldSuggestionMenu" />
+                   </contextMenu>
+               </TextField>
+               <TextField fx:id="fldTelefonInstitucije" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                   <GridPane.margin>
+                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                   </GridPane.margin>
+               </TextField>
+               <TextField fx:id="fldAdresaInstitucije" GridPane.rowIndex="3">
+                   <GridPane.margin>
+                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                   </GridPane.margin>
+               </TextField>
+               <TextField fx:id="fldPostanskiBroj" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                   <GridPane.margin>
+                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                   </GridPane.margin>
+               </TextField>
+           </children>
+       </GridPane>
       <Label text="%obrazovnaInstutucija">
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>
       </Label>
-      <VBox prefWidth="100.0" GridPane.rowIndex="1">
-         <children>
-            <Label text="%nazivInstutucije">
-               <VBox.margin>
-                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </VBox.margin>
-            </Label>
-            <TextField fx:id="fldNazivInstitucije">
-               <contextMenu>
-                  <ContextMenu />
-               </contextMenu>
-               <VBox.margin>
-                  <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
-               </VBox.margin>
-            </TextField>
-            <Label text="%postanskiBroj">
-               <VBox.margin>
-                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </VBox.margin>
-            </Label>
-            <TextField fx:id="fldPostanskiBroj">
-               <VBox.margin>
-                  <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
-               </VBox.margin>
-            </TextField>
-         </children>
-      </VBox>
-      <VBox GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <children>
-            <Label text="%adresaInstitucije">
-               <VBox.margin>
-                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </VBox.margin>
-            </Label>
-            <TextField fx:id="fldAdresaInstitucije">
-               <VBox.margin>
-                  <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
-               </VBox.margin>
-            </TextField>
-         </children>
-      </VBox>
-      <Label text="%izvjestaj" GridPane.rowIndex="3">
+      <Label text="%izvjestaj" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>
       </Label>
-      <Label text="%svjedoci" GridPane.rowIndex="6">
+      <Label text="%svjedoci" GridPane.rowIndex="7">
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>
       </Label>
-      <TextField fx:id="fldIzvjestaj" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+      <TextField fx:id="fldIzvjestaj" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
          <GridPane.margin>
             <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
          </GridPane.margin>
       </TextField>
-      <Separator prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="2" />
-      <GridPane hgap="5.0" vgap="5.0" GridPane.rowIndex="7">
+      <Separator prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3" />
+      <GridPane hgap="5.0" vgap="5.0" GridPane.rowIndex="8">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" />
           <ColumnConstraints hgrow="SOMETIMES" />
@@ -155,14 +173,14 @@
                   <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="fldIzjavaPrvog" prefHeight="100.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+            <TextField fx:id="fldIzjavaPrvog" alignment="TOP_LEFT" prefHeight="100.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
                </GridPane.margin>
             </TextField>
          </children>
       </GridPane>
-      <GridPane hgap="5.0" vgap="5.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
+      <GridPane hgap="5.0" vgap="5.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" />
           <ColumnConstraints hgrow="SOMETIMES" />
@@ -221,30 +239,22 @@
                   <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="fldIzjavaDrugog" prefHeight="100.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+            <TextField fx:id="fldIzjavaDrugog" alignment="TOP_LEFT" prefHeight="100.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
                </GridPane.margin>
             </TextField>
          </children>
       </GridPane>
-      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.rowSpan="2" />
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="11">
-        <buttons>
-          <Button mnemonicParsing="false" text="%create" />
-            <Button mnemonicParsing="false" text="%cancel" />
-        </buttons>
-         <GridPane.margin>
-            <Insets right="4.0" />
-         </GridPane.margin>
-      </ButtonBar>
-      <Separator prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="5" />
-      <Label text="%datumIVrijeme" GridPane.rowIndex="9">
+      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.rowSpan="2" />
+
+      <Separator prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="6" />
+      <Label text="%datumIVrijeme" GridPane.rowIndex="10">
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>
       </Label>
-      <VBox GridPane.rowIndex="10">
+      <VBox GridPane.rowIndex="11">
          <children>
             <Label text="%datum">
                <VBox.margin>
@@ -261,7 +271,7 @@
             <Insets />
          </GridPane.margin>
       </VBox>
-      <GridPane GridPane.columnIndex="2" GridPane.rowIndex="10">
+      <GridPane GridPane.columnIndex="2" GridPane.rowIndex="11">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -293,6 +303,15 @@
             </TextField>
          </children>
       </GridPane>
-      <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
+      <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="9" />
+       <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="12">
+           <buttons>
+               <Button mnemonicParsing="false" text="%create" />
+               <Button mnemonicParsing="false" text="%cancel" />
+           </buttons>
+           <GridPane.margin>
+               <Insets right="4.0" />
+           </GridPane.margin>
+       </ButtonBar>
    </children>
 </GridPane>
