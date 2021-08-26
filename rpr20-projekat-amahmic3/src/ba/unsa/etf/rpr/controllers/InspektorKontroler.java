@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.KorisnikDAO;
 import ba.unsa.etf.rpr.models.Izvještaj;
 import ba.unsa.etf.rpr.models.Korisnik;
 import javafx.event.ActionEvent;
@@ -31,7 +32,7 @@ public class InspektorKontroler {
         createWindow.setOnHiding((e)->{
             IzvjestajController ctrl = loader.getController();
             Izvještaj izvještaj = ctrl.getIzvještaj();
-
+            KorisnikDAO.getInstance().upisiIzvjestaj(izvještaj);
         });
     }
     public void prikaziInspektore(ActionEvent actionEvent){

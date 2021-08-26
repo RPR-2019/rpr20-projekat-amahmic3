@@ -15,15 +15,15 @@ CREATE TABLE IF NOT EXISTS "ObrazovnaInstitucija" (
                                                       "Naziv"	TEXT,
                                                       "Adresa"	TEXT,
                                                       "PostanskiBroj"	TEXT,
-                                                      "BrojTelefona"	TEXT,
+                                                      "BrojTelefona"	TEXT UNIQUE,
                                                       PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "Svjedok" (
                                          "ID"	INTEGER,
                                          "Ime"	TEXT,
                                          "Prezime"	TEXT,
-                                         "BrojTelefona"	TEXT,
-                                         "Email"	TEXT,
+                                         "BrojTelefona"	TEXT UNIQUE,
+                                         "Email"	TEXT UNIQUE,
                                          PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "IzjavaSvjedoka" (

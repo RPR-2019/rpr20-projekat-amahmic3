@@ -1,7 +1,6 @@
 package ba.unsa.etf.rpr;
 
-import ba.unsa.etf.rpr.models.Izvještaj;
-import ba.unsa.etf.rpr.models.Korisnik;
+import ba.unsa.etf.rpr.models.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,6 +12,9 @@ public class KorisnikDAO {
     private Connection conn;
     private static KorisnikDAO instance;
     private PreparedStatement korisnikUpit,usernameAvailableUpit,dodajInspektoraUpit,dajInspektoreUpit,upisiIzvjestajUpit,upisiSvjedokeUpit,upisiObrazovnuInstitucijuUpit,upisiIzjavuSvjedokaUpit;
+    private PreparedStatement dajSvjedokaSaEmailom;
+    private PreparedStatement dajObrazovnuInstituciju;
+    private PreparedStatement dajIDIzajveSvjedoka;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -30,6 +32,9 @@ public class KorisnikDAO {
         upisiIzjavuSvjedokaUpit = conn.prepareStatement("INSERT INTO IzjavaSvjedoka(IDSvjedoka,Izjava) VALUES (?,?)");
         upisiIzvjestajUpit = conn.prepareStatement("INSERT INTO Izvjestaj(inspektorID,obrazovnaInstitucijaID,izjavaPrvogSvjedokaID,izjavaDrugogSvjedokaID,Opis,DatumIVrijeme) VALUES" +
                 "(?,?,?,?,?,?)");
+        dajSvjedokaSaEmailom = conn.prepareStatement("SELECT ID FROM Svjedok WHERE Email = ?");
+        dajObrazovnuInstituciju = conn.prepareStatement("SELECT ID FROM ObrazovnaInstitucija WHERE Adresa = ? AND PostanskiBroj = ?");
+        dajIDIzajveSvjedoka = conn.prepareStatement("SELECT ID FROM IzjavaSvjedoka WHERE IDSvjedoka = ? AND Izjava = ?");
     }
     private KorisnikDAO(){
         try {
@@ -125,7 +130,65 @@ public class KorisnikDAO {
         }
         return povratnaLista;
     }
-    public int upisiIzvjestaj(Izvještaj izvještaj){
+    public void upisiIzvjestaj(Izvještaj izvještaj){
+        try {
+            upisiSvjedoka(izvještaj.getPrvi().getSvjedok());
+            upisiSvjedoka(izvještaj.getDrugi().getSvjedok());
+            upisiObrazovnuInstituciju(izvještaj.getObrazovnaInstitucija());
+            upisiIzjavuSvjedoka(izvještaj.getPrvi());
+            upisiIzjavuSvjedoka(izvještaj.getDrugi());
+            upisiIzvjestajUpit.setInt(1,izvještaj.getInspektor().getId());
+            upisiIzvjestajUpit.setInt(2,izvještaj.getObrazovnaInstitucija().getId());
+            upisiIzvjestajUpit.setInt(3,izvještaj.getPrvi().getId());
+            upisiIzvjestajUpit.setInt(4,izvještaj.getDrugi().getId());
+            upisiIzvjestajUpit.setString(5,izvještaj.getTekstIzvještaja());
+            upisiIzvjestajUpit.setString(6,izvještaj.getDatumIzvještaja().toString());
+            upisiIzvjestajUpit.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
+    }
+
+    private void upisiIzjavuSvjedoka(IzjavaSvjedoka prvi) throws SQLException {
+        upisiIzjavuSvjedokaUpit.setInt(1,prvi.getSvjedok().getId());
+        upisiIzjavuSvjedokaUpit.setString(2,prvi.getTekstIzjave());
+        upisiIzjavuSvjedokaUpit.executeUpdate();
+        dajIDIzajveSvjedoka.setInt(1,prvi.getSvjedok().getId());
+        dajIDIzajveSvjedoka.setString(2,prvi.getTekstIzjave());
+        ResultSet rs = dajIDIzajveSvjedoka.executeQuery();
+        while(rs.next()) prvi.setId(rs.getInt(1));
+    }
+
+    private void upisiObrazovnuInstituciju(ObrazovnaInstitucija obrazovnaInstitucija) throws SQLException {
+        dajObrazovnuInstituciju.setString(1,obrazovnaInstitucija.getAdresa());
+        dajObrazovnuInstituciju.setString(2,obrazovnaInstitucija.getPostanskiBroj());
+        ResultSet rs = dajObrazovnuInstituciju.executeQuery();
+        if(!rs.next()){
+            upisiObrazovnuInstitucijuUpit.setString(1,obrazovnaInstitucija.getNaziv());
+            upisiObrazovnuInstitucijuUpit.setString(2,obrazovnaInstitucija.getAdresa());
+            upisiObrazovnuInstitucijuUpit.setString(3,obrazovnaInstitucija.getPostanskiBroj());
+            upisiObrazovnuInstitucijuUpit.setString(4,obrazovnaInstitucija.getBrojTelefona());
+            upisiObrazovnuInstitucijuUpit.executeUpdate();
+            rs = dajObrazovnuInstituciju.executeQuery();
+            rs.next();
+        }
+        obrazovnaInstitucija.setId(rs.getInt(1));
+    }
+
+    private void upisiSvjedoka(Svjedok svjedok) throws SQLException {
+        dajSvjedokaSaEmailom.setString(1, svjedok.getEmail());
+        ResultSet rs = dajSvjedokaSaEmailom.executeQuery();
+        if(!rs.next()) {
+            upisiSvjedokeUpit.setString(1, svjedok.getIme());
+            upisiSvjedokeUpit.setString(2, svjedok.getPrezime());
+            upisiSvjedokeUpit.setString(3, svjedok.getBrojTelefona());
+            upisiSvjedokeUpit.setString(4, svjedok.getEmail());
+            upisiSvjedokeUpit.executeUpdate();
+            //dajSvjedokaSaEmailom.setString(1, svjedok.getEmail());
+            rs = dajSvjedokaSaEmailom.executeQuery();
+            rs.next();
+        }
+        svjedok.setId(rs.getInt(1));
     }
 }
