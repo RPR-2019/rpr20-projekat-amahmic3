@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 public class CreateKorisnikController {
-    private Korisnik noviKorisnik = new Korisnik();
+    private final Korisnik noviKorisnik = new Korisnik();
     public Parent rootPane;
     public TextField fldIme;
     public TextField fldPrezime;
@@ -25,9 +25,9 @@ public class CreateKorisnikController {
     public TextField fldPassword;
     public Button btnCreate;
     private boolean trebaKreirati = false;
-    private ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-    private boolean validirajEmail(String email){
-        return EmailValidator.getInstance().isValid(email);
+    private final ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+    public static boolean validirajEmail(String email){
+        return !EmailValidator.getInstance().isValid(email);
     }
     @FXML
     public void initialize(){
@@ -47,8 +47,8 @@ public class CreateKorisnikController {
 
         validacijskiListener(fldIme, String::isEmpty);
         validacijskiListener(fldPrezime, String::isEmpty);
-        validacijskiListener(fldEmail,s -> !validirajEmail(s));
-        validacijskiListener(fldBrojTelefona, s -> !validirajTelefon(s));
+        validacijskiListener(fldEmail, CreateKorisnikController::validirajEmail);
+        validacijskiListener(fldBrojTelefona, CreateKorisnikController::validirajTelefon);
         validacijskiListener(fldUsername,s->!validirajUsername(s));
         fldPassword.textProperty().addListener((obs,oldState,newState)->{
            if(newState.isEmpty()){
@@ -73,13 +73,15 @@ public class CreateKorisnikController {
     public boolean validirajUsername(String username){
          return KorisnikDAO.getInstance().provjeriUsername(username) && !username.isEmpty();
     }
-    public boolean validirajTelefon(String brTelefona){
-        return brTelefona.matches("[0-9]+");
+    public static boolean validirajTelefon(String brTelefona){
+        return !brTelefona.matches("[0-9]+");
     }
+
     public void validacijskiListener(TextField textField, Predicate<String> predikat)
     {
         textField.focusedProperty().addListener((obs,oldState,newState)->{
             if(!newState){
+                if(textField.textProperty().getValue()==null ) return;
                 if(predikat.test(textField.textProperty().getValue())){
                     textField.getStyleClass().removeAll("poljeIspravno");
                     textField.getStyleClass().add("poljeNijeIspravno");
