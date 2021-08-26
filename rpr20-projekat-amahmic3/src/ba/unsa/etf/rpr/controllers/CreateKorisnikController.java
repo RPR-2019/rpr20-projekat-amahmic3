@@ -4,6 +4,7 @@ import ba.unsa.etf.rpr.KorisnikDAO;
 import ba.unsa.etf.rpr.models.Korisnik;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -81,7 +82,12 @@ public class CreateKorisnikController {
     {
         textField.focusedProperty().addListener((obs,oldState,newState)->{
             if(!newState){
-                if(textField.textProperty().getValue()==null ) return;
+                if(textField.textProperty().getValue()==null ){
+                    textField.getStyleClass().removeAll("poljeIspravno");
+                    textField.getStyleClass().removeAll("poljeNijeIspravno");
+                    btnCreate.setDisable(true);
+                    return;
+                }
                 if(predikat.test(textField.textProperty().getValue())){
                     textField.getStyleClass().removeAll("poljeIspravno");
                     textField.getStyleClass().add("poljeNijeIspravno");
@@ -95,10 +101,10 @@ public class CreateKorisnikController {
         });
     }
 
-    private boolean sviValidni() {
+    private Boolean sviValidni() {
         return validan(fldIme) && validan(fldPrezime) && validan(fldEmail) && validan(fldBrojTelefona) && validan(fldUsername) && validan(fldPassword);
     }
-    private boolean validan(TextField textField){
+    public static boolean validan(Node textField){
         return textField.getStyleClass().contains("poljeIspravno");
     }
     public void generisiUsername(ActionEvent actionEvent){

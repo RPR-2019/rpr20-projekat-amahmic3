@@ -6,12 +6,16 @@ import ba.unsa.etf.rpr.models.Korisnik;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,11 +23,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class IzvjestajController {
-    Izvještaj izvještaj;
+    private Izvještaj izvještaj;
     public TextField fldNazivInstitucije;
     public TextField fldTelefonInstitucije;
     public TextField fldAdresaInstitucije;
@@ -45,7 +51,8 @@ public class IzvjestajController {
     public ImageView loadingImg;
     public ContextMenu fldSuggestionMenu;
     public Button btnCreate;
-
+    private Boolean trebaKreirati = false;
+    public Parent root;
     public IzvjestajController(Korisnik inspektor) {
         izvještaj = new Izvještaj();
         izvještaj.setInspektor(inspektor);
@@ -93,6 +100,7 @@ public class IzvjestajController {
         validacijskiListener(fldIzjavaDrugog,String::isEmpty);
         fldPostanskiBroj.focusedProperty().addListener((obs,stari,novi)->{
             if(!novi){
+               if(fldPostanskiBroj.textProperty().getValue() != null&&!fldPostanskiBroj.textProperty().getValue().isEmpty())
                 validirajPostanskiBroj(fldPostanskiBroj.textProperty().getValue());
             }
         });
@@ -100,9 +108,11 @@ public class IzvjestajController {
             if(novi!=null){
                 fldDatum.getStyleClass().removeAll("poljeNijeIspravno");
                 fldDatum.getStyleClass().add("poljeIspravno");
+                if(sviValidni()) btnCreate.setDisable(false);
             }else{
                 fldDatum.getStyleClass().removeAll("poljeIspravno");
                 fldDatum.getStyleClass().add("poljeNijeIspravno");
+                btnCreate.setDisable(true);
             }
         });
         validacijskiListener(fldSati,this::validirajSate);
@@ -157,10 +167,6 @@ public class IzvjestajController {
         new Thread(posao).start();
 
     }
-    private void dateListener(Observable obs, LocalDate oldDate, LocalDate newDate){
-        fldDatum.getStyleClass().add("poljeIspravno");
-
-    }
     private void fldNazivInstitucijeListener(Observable obs, String oldNaziv, String newNaziv){
 
     }
@@ -182,7 +188,10 @@ public class IzvjestajController {
     {
         textField.focusedProperty().addListener((obs,oldState,newState)->{
             if(!newState){
-                if(textField.textProperty().getValue()==null){
+                if(textField.textProperty().getValue()==null || textField.textProperty().getValue().isEmpty()){
+                    textField.getStyleClass().removeAll("poljeIspravno");
+                    textField.getStyleClass().removeAll("poljeNijeIspravno");
+                    btnCreate.setDisable(true);
                     return;
                 }
                 if(predikat.test(textField.textProperty().getValue())){
@@ -192,9 +201,29 @@ public class IzvjestajController {
                 }else{
                     textField.getStyleClass().removeAll("poljeNijeIspravno");
                     textField.getStyleClass().add("poljeIspravno");
-                  //  if(sviValidni()) btnCreate.setDisable(false);
+                    if(sviValidni()) btnCreate.setDisable(false);
                 }
             }
         });
+    }
+    private boolean sviValidni() {
+        Function<Node,Boolean> validacija = CreateKorisnikController::validan;
+        return validacija.apply(fldNazivInstitucije) && validacija.apply(fldAdresaInstitucije) && validacija.apply(fldPostanskiBroj) && validacija.apply(fldTelefonInstitucije)&& validacija.apply(fldIzvjestaj)&&
+        validacija.apply(fldImePrvog) && validacija.apply(fldPrezimePrvog) && validacija.apply(fldEmailPrvog) && validacija.apply(fldBrojPrvog) && validacija.apply(fldIzjavaPrvog) &&
+        validacija.apply(fldImeDrugog) && validacija.apply(fldPrezimeDrugog) && validacija.apply(fldEmailDrugog) && validacija.apply(fldBrojDrugog) && validacija.apply(fldIzjavaDrugog) &&
+        validacija.apply(fldDatum) && validacija.apply(fldSati) && validacija.apply(fldMinute);
+    }
+    public void kreirajIzvjestaj(ActionEvent actionEvent){
+        trebaKreirati=true;
+        izvještaj.setDatumIzvještaja(LocalDateTime.of(fldDatum.getValue(), LocalTime.of(Integer.parseInt(fldSati.textProperty().getValue()),Integer.parseInt(fldMinute.textProperty().getValue()))));
+        ((Stage)root.getScene().getWindow()).close();
+    }
+
+    public Boolean getTrebaKreirati() {
+        return trebaKreirati;
+    }
+
+    public Izvještaj getIzvještaj() {
+        return izvještaj;
     }
 }

@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.models.Izvještaj;
 import ba.unsa.etf.rpr.models.Korisnik;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,11 @@ public class InspektorKontroler {
         createWindow.setTitle(bundle.getString("create"));
         createWindow.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,USE_COMPUTED_SIZE));
         createWindow.show();
+        createWindow.setOnHiding((e)->{
+            IzvjestajController ctrl = loader.getController();
+            Izvještaj izvještaj = ctrl.getIzvještaj();
+
+        });
     }
     public void prikaziInspektore(ActionEvent actionEvent){
 

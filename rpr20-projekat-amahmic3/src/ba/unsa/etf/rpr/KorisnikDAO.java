@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr;
 
+import ba.unsa.etf.rpr.models.Izvještaj;
 import ba.unsa.etf.rpr.models.Korisnik;
 
 import java.io.FileInputStream;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 public class KorisnikDAO {
     private Connection conn;
     private static KorisnikDAO instance;
-    private PreparedStatement korisnikUpit,usernameAvailableUpit,dodajInspektoraUpit,dajInspektoreUpit;
+    private PreparedStatement korisnikUpit,usernameAvailableUpit,dodajInspektoraUpit,dajInspektoreUpit,upisiIzvjestajUpit,upisiSvjedokeUpit,upisiObrazovnuInstitucijuUpit,upisiIzjavuSvjedokaUpit;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -24,6 +25,11 @@ public class KorisnikDAO {
         usernameAvailableUpit = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik WHERE username LIKE ?");
         dodajInspektoraUpit = conn.prepareStatement("INSERT INTO Korisnik(ime,prezime,email,brojTelefona,username,password,administrator) VALUES(?,?,?,?,?,?,0)");
         dajInspektoreUpit = conn.prepareStatement("SELECT id,ime,prezime,brojTelefona,email,administrator,username,password FROM Korisnik WHERE administrator = 0");
+        upisiSvjedokeUpit = conn.prepareStatement("INSERT INTO Svjedok(Ime,Prezime,BrojTelefona,Email) VALUES (?,?,?,?)");
+        upisiObrazovnuInstitucijuUpit = conn.prepareStatement("INSERT INTO ObrazovnaInstitucija(Naziv,Adresa,PostanskiBroj,BrojTelefona) VALUES (?,?,?,?)");
+        upisiIzjavuSvjedokaUpit = conn.prepareStatement("INSERT INTO IzjavaSvjedoka(IDSvjedoka,Izjava) VALUES (?,?)");
+        upisiIzvjestajUpit = conn.prepareStatement("INSERT INTO Izvjestaj(inspektorID,obrazovnaInstitucijaID,izjavaPrvogSvjedokaID,izjavaDrugogSvjedokaID,Opis,DatumIVrijeme) VALUES" +
+                "(?,?,?,?,?,?)");
     }
     private KorisnikDAO(){
         try {
@@ -118,5 +124,8 @@ public class KorisnikDAO {
             throwables.printStackTrace();
         }
         return povratnaLista;
+    }
+    public int upisiIzvjestaj(Izvještaj izvještaj){
+
     }
 }

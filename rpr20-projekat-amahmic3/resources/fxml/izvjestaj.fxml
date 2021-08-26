@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="root" hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
   <stylesheets><URL value="@/css/createKorisnik.css" /> </stylesheets>
     <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" />
@@ -318,7 +318,7 @@
       <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="9" />
        <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="12">
            <buttons>
-               <Button fx:id="btnCreate" mnemonicParsing="false" text="%create" />
+               <Button fx:id="btnCreate" onAction="#kreirajIzvjestaj" mnemonicParsing="false" text="%create" />
                <Button fx:id="btnCancel" mnemonicParsing="false" text="%cancel" />
            </buttons>
            <GridPane.margin>
