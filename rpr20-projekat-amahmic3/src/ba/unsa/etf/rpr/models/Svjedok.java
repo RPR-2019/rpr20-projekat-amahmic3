@@ -1,14 +1,11 @@
 package ba.unsa.etf.rpr.models;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Svjedok {
-    private SimpleIntegerProperty id;
     private SimpleStringProperty ime,prezime,email,brojTelefona;
 
-    public Svjedok(int id, String ime, String prezime, String email, String brojTelefona) {
-        this.id = new SimpleIntegerProperty(id);
+    public Svjedok(String ime, String prezime, String email, String brojTelefona) {
         this.ime = new SimpleStringProperty(ime);
         this.prezime = new SimpleStringProperty(prezime);
         this.email = new SimpleStringProperty(email);
@@ -16,25 +13,11 @@ public class Svjedok {
     }
 
     public Svjedok() {
-        id = new SimpleIntegerProperty(0);
         ime = new SimpleStringProperty("");
         prezime = new SimpleStringProperty("");
         email= new SimpleStringProperty("");
         brojTelefona=new SimpleStringProperty("");
     }
-
-    public int getId() {
-        return id.get();
-    }
-
-    public SimpleIntegerProperty idProperty() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id.set(id);
-    }
-
     public String getIme() {
         return ime.get();
     }

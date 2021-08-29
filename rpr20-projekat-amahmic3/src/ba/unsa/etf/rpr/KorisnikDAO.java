@@ -11,10 +11,8 @@ import java.util.Scanner;
 public class KorisnikDAO {
     private Connection conn;
     private static KorisnikDAO instance;
-    private PreparedStatement korisnikUpit,usernameAvailableUpit,dodajInspektoraUpit,dajInspektoreUpit,upisiIzvjestajUpit,upisiSvjedokeUpit,upisiObrazovnuInstitucijuUpit,upisiIzjavuSvjedokaUpit;
-    private PreparedStatement dajSvjedokaSaEmailom;
+    private PreparedStatement korisnikUpit,usernameAvailableUpit,dodajInspektoraUpit,dajInspektoreUpit,upisiIzvjestajUpit,upisiObrazovnuInstitucijuUpit,upisiIzjavuSvjedokaUpit;
     private PreparedStatement dajObrazovnuInstituciju;
-    private PreparedStatement dajIDIzajveSvjedoka;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -27,14 +25,12 @@ public class KorisnikDAO {
         usernameAvailableUpit = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik WHERE username LIKE ?");
         dodajInspektoraUpit = conn.prepareStatement("INSERT INTO Korisnik(ime,prezime,email,brojTelefona,username,password,administrator) VALUES(?,?,?,?,?,?,0)");
         dajInspektoreUpit = conn.prepareStatement("SELECT id,ime,prezime,brojTelefona,email,administrator,username,password FROM Korisnik WHERE administrator = 0");
-        upisiSvjedokeUpit = conn.prepareStatement("INSERT INTO Svjedok(Ime,Prezime,BrojTelefona,Email) VALUES (?,?,?,?)");
         upisiObrazovnuInstitucijuUpit = conn.prepareStatement("INSERT INTO ObrazovnaInstitucija(Naziv,Adresa,PostanskiBroj,BrojTelefona) VALUES (?,?,?,?)");
-        upisiIzjavuSvjedokaUpit = conn.prepareStatement("INSERT INTO IzjavaSvjedoka(IDSvjedoka,Izjava) VALUES (?,?)");
+        upisiIzjavuSvjedokaUpit = conn.prepareStatement("INSERT INTO IzjavaSvjedoka(Ime,Prezime,Email,BrojTelefona,Izjava) VALUES (?,?,?,?,?)");
         upisiIzvjestajUpit = conn.prepareStatement("INSERT INTO Izvjestaj(inspektorID,obrazovnaInstitucijaID,izjavaPrvogSvjedokaID,izjavaDrugogSvjedokaID,Opis,DatumIVrijeme) VALUES" +
                 "(?,?,?,?,?,?)");
-        dajSvjedokaSaEmailom = conn.prepareStatement("SELECT ID FROM Svjedok WHERE Email = ?");
         dajObrazovnuInstituciju = conn.prepareStatement("SELECT ID FROM ObrazovnaInstitucija WHERE Adresa = ? AND PostanskiBroj = ?");
-        dajIDIzajveSvjedoka = conn.prepareStatement("SELECT ID FROM IzjavaSvjedoka WHERE IDSvjedoka = ? AND Izjava = ?");
+
     }
     private KorisnikDAO(){
         try {
@@ -132,8 +128,6 @@ public class KorisnikDAO {
     }
     public void upisiIzvjestaj(Izvještaj izvještaj){
         try {
-            upisiSvjedoka(izvještaj.getPrvi().getSvjedok());
-            upisiSvjedoka(izvještaj.getDrugi().getSvjedok());
             upisiObrazovnuInstituciju(izvještaj.getObrazovnaInstitucija());
             upisiIzjavuSvjedoka(izvještaj.getPrvi());
             upisiIzjavuSvjedoka(izvještaj.getDrugi());
@@ -150,14 +144,13 @@ public class KorisnikDAO {
 
     }
 
-    private void upisiIzjavuSvjedoka(IzjavaSvjedoka prvi) throws SQLException {
-        upisiIzjavuSvjedokaUpit.setInt(1,prvi.getSvjedok().getId());
-        upisiIzjavuSvjedokaUpit.setString(2,prvi.getTekstIzjave());
+    private void upisiIzjavuSvjedoka(IzjavaSvjedoka izjavaSvjedoka) throws SQLException {
+        upisiIzjavuSvjedokaUpit.setString(1,izjavaSvjedoka.getSvjedok().getIme());
+        upisiIzjavuSvjedokaUpit.setString(2,izjavaSvjedoka.getSvjedok().getPrezime());
+        upisiIzjavuSvjedokaUpit.setString(3,izjavaSvjedoka.getSvjedok().getEmail());
+        upisiIzjavuSvjedokaUpit.setString(4,izjavaSvjedoka.getSvjedok().getBrojTelefona());
+        upisiIzjavuSvjedokaUpit.setString(5,izjavaSvjedoka.getTekstIzjave());
         upisiIzjavuSvjedokaUpit.executeUpdate();
-        dajIDIzajveSvjedoka.setInt(1,prvi.getSvjedok().getId());
-        dajIDIzajveSvjedoka.setString(2,prvi.getTekstIzjave());
-        ResultSet rs = dajIDIzajveSvjedoka.executeQuery();
-        while(rs.next()) prvi.setId(rs.getInt(1));
     }
 
     private void upisiObrazovnuInstituciju(ObrazovnaInstitucija obrazovnaInstitucija) throws SQLException {
@@ -176,19 +169,4 @@ public class KorisnikDAO {
         obrazovnaInstitucija.setId(rs.getInt(1));
     }
 
-    private void upisiSvjedoka(Svjedok svjedok) throws SQLException {
-        dajSvjedokaSaEmailom.setString(1, svjedok.getEmail());
-        ResultSet rs = dajSvjedokaSaEmailom.executeQuery();
-        if(!rs.next()) {
-            upisiSvjedokeUpit.setString(1, svjedok.getIme());
-            upisiSvjedokeUpit.setString(2, svjedok.getPrezime());
-            upisiSvjedokeUpit.setString(3, svjedok.getBrojTelefona());
-            upisiSvjedokeUpit.setString(4, svjedok.getEmail());
-            upisiSvjedokeUpit.executeUpdate();
-            //dajSvjedokaSaEmailom.setString(1, svjedok.getEmail());
-            rs = dajSvjedokaSaEmailom.executeQuery();
-            rs.next();
-        }
-        svjedok.setId(rs.getInt(1));
-    }
 }
