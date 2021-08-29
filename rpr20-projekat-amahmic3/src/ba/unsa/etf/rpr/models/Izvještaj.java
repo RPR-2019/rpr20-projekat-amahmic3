@@ -14,6 +14,7 @@ public class Izvještaj {
     private LocalDateTime datumIzvještaja;
     private ArrayList<IzjavaSvjedoka> izjaveSvjedoka;
 
+
     public Izvještaj(int id, Korisnik inspektor, ObrazovnaInstitucija obrazovnaInstitucija, String tekstIzvještaja, LocalDateTime datumIzvještaja, IzjavaSvjedoka[] izjaveSvjedoka) {
         this.id = new SimpleIntegerProperty(id);
         this.inspektor= inspektor;

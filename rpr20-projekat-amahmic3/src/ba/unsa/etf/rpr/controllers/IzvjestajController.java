@@ -10,10 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
@@ -34,17 +31,17 @@ public class IzvjestajController {
     public TextField fldTelefonInstitucije;
     public TextField fldAdresaInstitucije;
     public TextField fldPostanskiBroj;
-    public TextField fldIzvjestaj;
+    public TextArea fldIzvjestaj;
     public TextField fldImePrvog;
     public TextField fldPrezimePrvog;
     public TextField fldEmailPrvog;
     public TextField fldBrojPrvog;
-    public TextField fldIzjavaPrvog;
+    public TextArea fldIzjavaPrvog;
     public TextField fldImeDrugog;
     public TextField fldPrezimeDrugog;
     public TextField fldEmailDrugog;
     public TextField fldBrojDrugog;
-    public TextField fldIzjavaDrugog;
+    public TextArea fldIzjavaDrugog;
     public TextField fldSati;
     public TextField fldMinute;
     public DatePicker fldDatum;
@@ -170,21 +167,21 @@ public class IzvjestajController {
     private void fldNazivInstitucijeListener(Observable obs, String oldNaziv, String newNaziv){
 
     }
-    private void bindSvjedoka(TextField fldIme, TextField fldPrezime, TextField fldEmail, TextField fldBroj, TextField fldIzjava, IzjavaSvjedoka izjavaSvjedoka) {
+    private void bindSvjedoka(TextField fldIme, TextField fldPrezime, TextField fldEmail, TextField fldBroj, TextArea fldIzjava, IzjavaSvjedoka izjavaSvjedoka) {
         fldIme.textProperty().bindBidirectional(izjavaSvjedoka.getSvjedok().imeProperty());
         fldPrezime.textProperty().bindBidirectional(izjavaSvjedoka.getSvjedok().prezimeProperty());
         fldEmail.textProperty().bindBidirectional(izjavaSvjedoka.getSvjedok().emailProperty());
         fldBroj.textProperty().bindBidirectional(izjavaSvjedoka.getSvjedok().brojTelefonaProperty());
         fldIzjava.textProperty().bindBidirectional(izjavaSvjedoka.tekstIzjaveProperty());
     }
-    private void onChangeListener(TextField textField){
+    private void onChangeListener(TextInputControl textField){
         textField.textProperty().addListener((obs,novo,staro)->{
             textField.getStyleClass().removeAll("poljeIspravno");
             textField.getStyleClass().removeAll("poljeNijeIspravno");
             btnCreate.setDisable(true);
         });
     }
-    public void validacijskiListener(TextField textField, Predicate<String> predikat)
+    public void validacijskiListener(TextInputControl textField, Predicate<String> predikat)
     {
         textField.focusedProperty().addListener((obs,oldState,newState)->{
             if(!newState){

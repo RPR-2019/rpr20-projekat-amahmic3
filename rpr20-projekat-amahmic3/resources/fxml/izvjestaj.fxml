@@ -16,6 +16,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.text.Text?>
 <GridPane fx:id="root" hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
   <stylesheets><URL value="@/css/createKorisnik.css" /> </stylesheets>
     <columnConstraints>
@@ -120,11 +122,11 @@
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </GridPane.margin>
       </Label>
-      <TextField fx:id="fldIzvjestaj" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+      <TextArea fx:id="fldIzvjestaj"  maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
          <GridPane.margin>
             <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
          </GridPane.margin>
-      </TextField>
+      </TextArea>
       <Separator prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3" />
       <GridPane hgap="5.0" vgap="5.0" GridPane.rowIndex="8">
         <columnConstraints>
@@ -185,11 +187,11 @@
                   <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="fldIzjavaPrvog" alignment="TOP_LEFT" prefHeight="100.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+            <TextArea fx:id="fldIzjavaPrvog" prefHeight="100.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
                </GridPane.margin>
-            </TextField>
+            </TextArea>
          </children>
       </GridPane>
       <GridPane hgap="5.0" vgap="5.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
@@ -251,11 +253,11 @@
                   <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="fldIzjavaDrugog" alignment="TOP_LEFT" prefHeight="100.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+            <TextArea fx:id="fldIzjavaDrugog"  prefHeight="100.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets bottom="2.0" left="4.0" right="4.0" top="2.0" />
                </GridPane.margin>
-            </TextField>
+            </TextArea>
          </children>
       </GridPane>
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.rowSpan="2" />

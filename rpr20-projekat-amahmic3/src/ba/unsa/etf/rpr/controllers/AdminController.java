@@ -41,7 +41,7 @@ public class AdminController {
     public TableColumn<Korisnik,String> rowPrezime;
     public TableColumn<Korisnik,String> rowUsername;
     public TableColumn<Korisnik,String> rowEmail;
-    private ObservableList<Korisnik> inspektori = FXCollections.observableArrayList();
+    private final ObservableList<Korisnik> inspektori = FXCollections.observableArrayList();
 
 
     public AdminController(){

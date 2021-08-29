@@ -5,6 +5,7 @@ import ba.unsa.etf.rpr.models.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,6 +14,10 @@ public class KorisnikDAO {
     private static KorisnikDAO instance;
     private PreparedStatement korisnikUpit,usernameAvailableUpit,dodajInspektoraUpit,dajInspektoreUpit,upisiIzvjestajUpit,upisiObrazovnuInstitucijuUpit,upisiIzjavuSvjedokaUpit;
     private PreparedStatement dajObrazovnuInstituciju;
+    private PreparedStatement dajIzvjestajeOdInspektoraUpit;
+    private PreparedStatement dajBrojIzjavaSvjedoka;
+    private PreparedStatement dajObrazovnuInstitucijuID;
+    private PreparedStatement dajIzjavuSvjedokaID;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -31,6 +36,10 @@ public class KorisnikDAO {
                 "(?,?,?,?,?,?)");
         dajObrazovnuInstituciju = conn.prepareStatement("SELECT ID FROM ObrazovnaInstitucija WHERE Adresa = ? AND PostanskiBroj = ?");
 
+        dajIzvjestajeOdInspektoraUpit = conn.prepareStatement("SELECT ID,obrazovnaInstitucijaID,IzjavaPrvogSvjedokaID,IzjavaDrugogSvjedokaID,Opis,DatumIVrijeme FROM Izvjestaj WHERE inspektorID = ?");
+        dajObrazovnuInstitucijuID = conn.prepareStatement("SELECT Naziv,Adresa,PostanskiBroj,BrojTelefona FROM ObrazovnaInstitucija WHERE ID = ?");
+        dajIzjavuSvjedokaID= conn.prepareStatement("SELECT Ime,Prezime,Email,BrojTelefona,Izjava FROM IzjavaSvjedoka WHERE ID = ?");
+        dajBrojIzjavaSvjedoka = conn.prepareStatement("SELECT COUNT(*) FROM IzjavaSvjedoka");
     }
     private KorisnikDAO(){
         try {
@@ -128,6 +137,11 @@ public class KorisnikDAO {
     }
     public void upisiIzvjestaj(Izvještaj izvještaj){
         try {
+             ResultSet rs = dajBrojIzjavaSvjedoka.executeQuery();
+             rs.next();
+             int idSvjedoka = rs.getInt(1);
+             izvještaj.getPrvi().setId(idSvjedoka+1);
+            izvještaj.getDrugi().setId(idSvjedoka+2);
             upisiObrazovnuInstituciju(izvještaj.getObrazovnaInstitucija());
             upisiIzjavuSvjedoka(izvještaj.getPrvi());
             upisiIzjavuSvjedoka(izvještaj.getDrugi());
@@ -169,4 +183,41 @@ public class KorisnikDAO {
         obrazovnaInstitucija.setId(rs.getInt(1));
     }
 
+    public ArrayList<Izvještaj> dajSveIzvjestaje(Korisnik inspektor) {
+        ArrayList<Izvještaj> povratnaLista = new ArrayList<>();
+        try {
+            dajIzvjestajeOdInspektoraUpit.setInt(1,inspektor.getId());
+            ResultSet rs = dajIzvjestajeOdInspektoraUpit.executeQuery();
+            ResultSet obrazovnaInstitucija,izjavaSvjedoka;
+            while (rs.next()){
+                dajObrazovnuInstitucijuID.setInt(1,rs.getInt(2));
+                obrazovnaInstitucija = dajObrazovnuInstitucijuID.executeQuery();
+                obrazovnaInstitucija.next();
+                ObrazovnaInstitucija novaObrazovna = new ObrazovnaInstitucija(rs.getInt(2),obrazovnaInstitucija.getString(1),obrazovnaInstitucija.getString(2),obrazovnaInstitucija.getString(4),obrazovnaInstitucija.getString(3));
+
+                dajIzjavuSvjedokaID.setInt(1,rs.getInt(3));
+                izjavaSvjedoka = dajIzjavuSvjedokaID.executeQuery();
+                IzjavaSvjedoka[] izjaveSvjedoka={null,null};
+                izjaveSvjedoka[0] = kreirajIzjavu(izjavaSvjedoka,rs.getInt(3));
+                dajIzjavuSvjedokaID.setInt(1,rs.getInt(4));
+                izjavaSvjedoka = dajIzjavuSvjedokaID.executeQuery();
+                izjaveSvjedoka[1] = kreirajIzjavu(izjavaSvjedoka,rs.getInt(4));
+
+                povratnaLista.add(new Izvještaj(rs.getInt(1),inspektor, novaObrazovna,rs.getString(5), LocalDateTime.parse(rs.getString(6)),izjaveSvjedoka));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return povratnaLista;
+    }
+    private IzjavaSvjedoka kreirajIzjavu(ResultSet izjavaSvjedoka,int id){
+        try {
+            izjavaSvjedoka.next();
+            return new IzjavaSvjedoka(id,new Svjedok(izjavaSvjedoka.getString(1),izjavaSvjedoka.getString(2),izjavaSvjedoka.getString(3),izjavaSvjedoka.getString(4)),izjavaSvjedoka.getString(5));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
