@@ -11,18 +11,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
 public class InspektorKontroler {
     Korisnik inspektor;
+    public Pane profilPane;
+    public Pane izvjestajiPane;
     private final ObservableList<Izvještaj> izvjestaji = FXCollections.observableArrayList();
     public TableView<Izvještaj> tblIzvjestaji;
     public TableColumn<Izvještaj,Number> rowID;
@@ -30,17 +35,27 @@ public class InspektorKontroler {
     public TableColumn<Izvještaj,String> rowAdresaInstitucije;
     public TableColumn<Izvještaj,String> rowPostanskiBroj;
     public TableColumn<Izvještaj,String> rowDatumInspekcije;
+    public Button btnIzvjestaji;
+    public Button btnProfil;
+    public Label lblIme,lblPrezime,lblUsername,lblEmail,lblBrojTelefona;
     public InspektorKontroler(Korisnik inspektor) {
         this.inspektor = inspektor;
-        izvjestaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestaje(inspektor));
+        izvjestaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestajeOdInspektora(inspektor));
     }
     @FXML
     public void initialize(){
+        profilPane.setVisible(true);
+        izvjestajiPane.setVisible(false);
+        lblIme.setText(inspektor.getIme());
+        lblPrezime.setText(inspektor.getPrezime());
+        lblUsername.setText(inspektor.getUsername());
+        lblEmail.setText(inspektor.getEmail());
+        lblBrojTelefona.setText(inspektor.getBrojTelefona());
         rowID.setCellValueFactory(i -> i.getValue().idProperty());
         rowObrazovnaInstitucija.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().nazivProperty());
         rowAdresaInstitucije.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().adresaProperty());
         rowPostanskiBroj.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().postanskiBrojProperty());
-        rowDatumInspekcije.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getDatumIzvještaja().toString()));
+        rowDatumInspekcije.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getDatumIzvještaja().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))));
 
         tblIzvjestaji.setItems(izvjestaji);
     }
@@ -61,10 +76,20 @@ public class InspektorKontroler {
         });
     }
     public void prikaziInspektorPanel(ActionEvent actionEvent){
-
+        profilPane.setVisible(true);
+        izvjestajiPane.setVisible(false);
+        btnProfil.getStyleClass().removeAll("buttonNotSelected");
+        btnProfil.getStyleClass().removeAll("buttonHovered");
+        btnIzvjestaji.getStyleClass().removeAll("buttonSelected");
+        btnProfil.getStyleClass().add("buttonSelected");
     }
     public  void prikaziIzvjestaje(ActionEvent actionEvent){
-
+        profilPane.setVisible(false);
+        izvjestajiPane.setVisible(true);
+        btnIzvjestaji.getStyleClass().removeAll("buttonNotSelected");
+        btnIzvjestaji.getStyleClass().removeAll("buttonHovered");
+        btnProfil.getStyleClass().removeAll("buttonSelected");
+        btnIzvjestaji.getStyleClass().add("buttonSelected");
     }
     public void obojiUlaz(MouseEvent actionEvent){
         Button btn = (Button)actionEvent.getSource();

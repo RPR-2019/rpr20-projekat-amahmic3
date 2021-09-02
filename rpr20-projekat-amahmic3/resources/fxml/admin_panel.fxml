@@ -54,12 +54,14 @@
                   <Insets left="2.0" top="2.0" />
                </GridPane.margin>
             </Label>
-            <TableView GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
+            <TableView fx:id="tblReports" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
               <columns>
-                <TableColumn prefWidth="75.0" text="ID" />
-                <TableColumn prefWidth="75.0" text="%obrazovnaInstitucija" />
-                  <TableColumn prefWidth="75.0" text="%inspektor" />
-                  <TableColumn prefWidth="75.0" text="%datumInspekcije" />
+                <TableColumn fx:id="rowIDIzvjestaja" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="rowObrazovnaInstitucija" prefWidth="75.0" text="%obrazovnaInstitucija" />
+                  <TableColumn fx:id="rowAdresaInstitucije" prefWidth="75.0" text="%adresaInstitucije" />
+                  <TableColumn fx:id="rowPostanskiBroj" prefWidth="75.0" text="%postanskiBroj" />
+                  <TableColumn fx:id="rowInspektor" prefWidth="75.0" text="%inspektor" />
+                  <TableColumn fx:id="rowDatumInspekcije" prefWidth="75.0" text="%datumInspekcije" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

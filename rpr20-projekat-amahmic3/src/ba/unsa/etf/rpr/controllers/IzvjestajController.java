@@ -1,13 +1,16 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.KorisnikDAO;
 import ba.unsa.etf.rpr.models.IzjavaSvjedoka;
 import ba.unsa.etf.rpr.models.Izvještaj;
 import ba.unsa.etf.rpr.models.Korisnik;
+import ba.unsa.etf.rpr.models.ObrazovnaInstitucija;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -22,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -80,7 +84,28 @@ public class IzvjestajController {
         onChangeListener(fldEmailDrugog);
         onChangeListener(fldBrojDrugog);
         onChangeListener(fldIzjavaDrugog);
-
+        fldNazivInstitucije.textProperty().addListener((obs, stari ,novi )->{
+            if(novi.length()>=3){
+                fldSuggestionMenu.getItems().clear();
+                var listaInstitucija = KorisnikDAO.getInstance().obrazovneInstitucijeSuggestion(novi);
+                for(var obrazovnaInstitucija : listaInstitucija){
+                    fldSuggestionMenu.getItems().add(new MenuItem(obrazovnaInstitucija.getNaziv()+", "+obrazovnaInstitucija.getAdresa()+", "+obrazovnaInstitucija.getPostanskiBroj()+", "+obrazovnaInstitucija.getBrojTelefona()));
+                }
+                fldSuggestionMenu.show(fldNazivInstitucije, Side.BOTTOM,0,0);
+            }else{
+                fldSuggestionMenu.getItems().clear();
+                fldSuggestionMenu.hide();
+            }
+        });
+        fldSuggestionMenu.setOnAction((e)->{
+            var tekst =((MenuItem)e.getTarget()).getText();
+            String[] polja = tekst.split(", ");
+            fldNazivInstitucije.textProperty().setValue(polja[0]);
+            fldAdresaInstitucije.textProperty().setValue(polja[1]);
+            fldPostanskiBroj.textProperty().setValue(polja[2]);
+            fldTelefonInstitucije.textProperty().setValue(polja[3]);
+            validirajInstituciju();
+        });
         validacijskiListener(fldNazivInstitucije,String::isEmpty);
         validacijskiListener(fldAdresaInstitucije,String::isEmpty);
         validacijskiListener(fldTelefonInstitucije, CreateKorisnikController::validirajTelefon);
@@ -115,6 +140,18 @@ public class IzvjestajController {
         validacijskiListener(fldSati,this::validirajSate);
         validacijskiListener(fldMinute,this::validirajMinute);
     }
+
+    private void validirajInstituciju() {
+        fldNazivInstitucije.getStyleClass().removeAll("poljeNijeIspravno");
+        fldAdresaInstitucije.getStyleClass().removeAll("poljeNijeIspravno");
+        fldPostanskiBroj.getStyleClass().removeAll("poljeNijeIspravno");
+        fldTelefonInstitucije.getStyleClass().removeAll("poljeNijeIspravno");
+        fldNazivInstitucije.getStyleClass().add("poljeIspravno");
+        fldAdresaInstitucije.getStyleClass().add("poljeIspravno");
+        fldPostanskiBroj.getStyleClass().add("poljeIspravno");
+        fldTelefonInstitucije.getStyleClass().add("poljeIspravno");
+    }
+
     private boolean validirajSate(String sati){
         return !sati.matches("0?[0-9]|1[0-9]|2[0-3]");
     }
@@ -223,4 +260,5 @@ public class IzvjestajController {
     public Izvještaj getIzvještaj() {
         return izvještaj;
     }
+
 }

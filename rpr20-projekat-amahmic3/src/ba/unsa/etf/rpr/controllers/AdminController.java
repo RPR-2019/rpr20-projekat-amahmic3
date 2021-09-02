@@ -1,7 +1,9 @@
 package ba.unsa.etf.rpr.controllers;
 
 import ba.unsa.etf.rpr.KorisnikDAO;
+import ba.unsa.etf.rpr.models.Izvještaj;
 import ba.unsa.etf.rpr.models.Korisnik;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
@@ -30,11 +33,7 @@ public class AdminController {
     public Button btnIzvjestaji;
     public Button btnEdit;
     public Button btnDelete;
-    public AdminController(Korisnik korisnik){
-        admin=korisnik;
-        inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
-        System.out.println(inspektori.size());
-    }
+
     public TableView<Korisnik> tblInspektori;
     public TableColumn<Korisnik,String> rowID;
     public TableColumn<Korisnik,String> rowIme;
@@ -42,11 +41,23 @@ public class AdminController {
     public TableColumn<Korisnik,String> rowUsername;
     public TableColumn<Korisnik,String> rowEmail;
     private final ObservableList<Korisnik> inspektori = FXCollections.observableArrayList();
+    public TableView<Izvještaj> tblReports;
+    public TableColumn<Izvještaj,Number> rowIDIzvjestaja;
+    public TableColumn<Izvještaj,String> rowObrazovnaInstitucija;
+    public TableColumn<Izvještaj,String> rowInspektor;
+    public TableColumn<Izvještaj,String> rowDatumInspekcije;
+    public TableColumn<Izvještaj,String> rowAdresaInstitucije;
+    public TableColumn<Izvještaj,String> rowPostanskiBroj;
+    private ObservableList<Izvještaj> izvještaji = FXCollections.observableArrayList();
+    public AdminController(Korisnik korisnik){
+        admin=korisnik;
+        inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
+        izvještaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestaje());
 
+    }
 
     public AdminController(){
         inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
-        System.out.println(inspektori.size());
     }
     @FXML
     public void initialize(){
@@ -63,6 +74,13 @@ public class AdminController {
         rowUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         tblInspektori.setItems(inspektori);
 
+        rowIDIzvjestaja.setCellValueFactory(i -> i.getValue().idProperty());
+        rowObrazovnaInstitucija.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().nazivProperty());
+        rowInspektor.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getInspektor().getIme()+" "+i.getValue().getInspektor().getPrezime()));
+        rowAdresaInstitucije.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().adresaProperty());
+        rowPostanskiBroj.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().postanskiBrojProperty());
+        rowDatumInspekcije.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getDatumIzvještaja().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))));
+        tblReports.setItems(izvještaji);
         tblInspektori.getSelectionModel().selectedItemProperty().addListener((obs,stari,novi)->{
             if(novi==null){
                 btnDelete.setDisable(true);

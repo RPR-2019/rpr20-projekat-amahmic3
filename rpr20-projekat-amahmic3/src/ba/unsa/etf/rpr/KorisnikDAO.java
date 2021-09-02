@@ -18,6 +18,9 @@ public class KorisnikDAO {
     private PreparedStatement dajBrojIzjavaSvjedoka;
     private PreparedStatement dajObrazovnuInstitucijuID;
     private PreparedStatement dajIzjavuSvjedokaID;
+    private PreparedStatement dajKorisnikaID;
+    private PreparedStatement dajBrojInspektora;
+    private PreparedStatement obrazovnaInstitucijaSuggestion;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -40,6 +43,9 @@ public class KorisnikDAO {
         dajObrazovnuInstitucijuID = conn.prepareStatement("SELECT Naziv,Adresa,PostanskiBroj,BrojTelefona FROM ObrazovnaInstitucija WHERE ID = ?");
         dajIzjavuSvjedokaID= conn.prepareStatement("SELECT Ime,Prezime,Email,BrojTelefona,Izjava FROM IzjavaSvjedoka WHERE ID = ?");
         dajBrojIzjavaSvjedoka = conn.prepareStatement("SELECT COUNT(*) FROM IzjavaSvjedoka");
+        dajKorisnikaID = conn.prepareStatement("SELECT ime,prezime,brojTelefona,email,administrator,username,password FROM Korisnik WHERE id = ?");
+        dajBrojInspektora = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik");
+        obrazovnaInstitucijaSuggestion = conn.prepareStatement("SELECT ID, Naziv, Adresa, BrojTelefona, PostanskiBroj FROM ObrazovnaInstitucija WHERE Naziv LIKE ?");
     }
     private KorisnikDAO(){
         try {
@@ -183,7 +189,7 @@ public class KorisnikDAO {
         obrazovnaInstitucija.setId(rs.getInt(1));
     }
 
-    public ArrayList<Izvještaj> dajSveIzvjestaje(Korisnik inspektor) {
+    public ArrayList<Izvještaj> dajSveIzvjestajeOdInspektora(Korisnik inspektor) {
         ArrayList<Izvještaj> povratnaLista = new ArrayList<>();
         try {
             dajIzvjestajeOdInspektoraUpit.setInt(1,inspektor.getId());
@@ -220,4 +226,46 @@ public class KorisnikDAO {
         }
         return null;
     }
+    public ArrayList<Izvještaj> dajSveIzvjestaje(){
+        ArrayList<Izvještaj> povratna = new ArrayList<>();
+        try {
+            var resultSet = dajBrojInspektora.executeQuery();
+            resultSet.next();
+            var brInstuktora = resultSet.getInt(1);
+            for(int i=2;i<=brInstuktora;i++){
+                Korisnik k =kreirajInspektora(i);
+                povratna.addAll(dajSveIzvjestajeOdInspektora(k));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return povratna;
+    }
+    private Korisnik kreirajInspektora(int Id){
+        Korisnik povratni = null;
+        try {
+            dajKorisnikaID.setInt(1,Id);
+            ResultSet rs = dajKorisnikaID.executeQuery();
+            if(rs.next()){
+                povratni = new Korisnik(Id,rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getInt(5)==1,rs.getString(6),rs.getString(7));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return povratni;
+    }
+    public ArrayList<ObrazovnaInstitucija> obrazovneInstitucijeSuggestion(String naziv){
+        ArrayList<ObrazovnaInstitucija> povratna = new ArrayList<>();
+        try {
+            obrazovnaInstitucijaSuggestion.setString(1,naziv+"%");
+            ResultSet rs = obrazovnaInstitucijaSuggestion.executeQuery();
+            while(rs.next()){
+                povratna.add(new ObrazovnaInstitucija(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return povratna;
+    }
+
 }
