@@ -10,10 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -21,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
@@ -39,12 +37,51 @@ public class InspektorKontroler {
     public Button btnProfil;
     public Button btnOpen;
     public Label lblIme,lblPrezime,lblUsername,lblEmail,lblBrojTelefona;
+    public ChoiceBox<String> chbFilteri;
+    public TextField fldFilter;
+    public DatePicker filterDate;
+    private ObservableList<String> listaOpcija = FXCollections.observableArrayList();
+    private ObservableList<Izvještaj> pomocnaLista = FXCollections.observableArrayList();
     public InspektorKontroler(Korisnik inspektor) {
         this.inspektor = inspektor;
         izvjestaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestajeOdInspektora(inspektor));
+        listaOpcija.addAll("Naziv obrazovne institucije","Ime i prezime inspektora", "Datum inspekcije");
     }
     @FXML
     public void initialize(){
+        chbFilteri.setItems(listaOpcija);
+        chbFilteri.getSelectionModel().selectedIndexProperty().addListener((obs,stari,novi)->{
+            if(novi.intValue() == 2){
+                filterDate.setVisible(true);
+                fldFilter.setVisible(false);
+                filterDate.getEditor().clear();
+            }else{
+                fldFilter.clear();
+                filterDate.setVisible(false);
+                fldFilter.setVisible(true);
+            }
+            tblIzvjestaji.setItems(izvjestaji);
+        });
+        fldFilter.textProperty().addListener((obs,stari,novi)->{
+            if(chbFilteri.getSelectionModel().getSelectedIndex()==0){
+                if(novi.length()>0) {
+                    pomocnaLista.clear();
+                    pomocnaLista.addAll(izvjestaji.stream().filter((s) -> s.getObrazovnaInstitucija().getNaziv().startsWith(novi)).collect(Collectors.toList()));
+                    tblIzvjestaji.setItems(pomocnaLista);
+                }else tblIzvjestaji.setItems(izvjestaji);
+            }else{
+                if(novi.length()>0) {
+                    pomocnaLista.clear();
+                    pomocnaLista.addAll(izvjestaji.stream().filter((s) -> (s.getInspektor().getIme()+" "+s.getInspektor().getPrezime()).startsWith(novi)).collect(Collectors.toList()));
+                    tblIzvjestaji.setItems(pomocnaLista);
+                }else tblIzvjestaji.setItems(izvjestaji);
+            }
+        });
+        filterDate.valueProperty().addListener((obs,stari,novi)->{
+                pomocnaLista.clear();
+                pomocnaLista.addAll(izvjestaji.stream().filter((s) -> s.getDatumIzvještaja().toLocalDate().equals(novi)).collect(Collectors.toList()));
+                tblIzvjestaji.setItems(pomocnaLista);
+        });
         profilPane.setVisible(true);
         izvjestajiPane.setVisible(false);
         lblIme.setText(inspektor.getIme());
@@ -110,10 +147,14 @@ public class InspektorKontroler {
         btn.getStyleClass().add("buttonNotSelected");
     }
     public void otvoriIzvjestaj(ActionEvent actionEvent) throws IOException {
+        otvoriIzvjestaj(tblIzvjestaji.getSelectionModel().getSelectedItem());
+    }
+
+    public static void otvoriIzvjestaj(Izvještaj izvještaj) throws IOException {
         Stage createWindow = new Stage();
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/izvjestaj.fxml"),bundle);
-        loader.setController(new IzvjestajController(tblIzvjestaji.getSelectionModel().getSelectedItem()));
+        FXMLLoader loader = new FXMLLoader(InspektorKontroler.class.getResource("/fxml/izvjestaj.fxml"),bundle);
+        loader.setController(new IzvjestajController(izvještaj));
         createWindow.setTitle(bundle.getString("create"));
         createWindow.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,USE_COMPUTED_SIZE));
         createWindow.show();

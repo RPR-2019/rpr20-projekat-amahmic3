@@ -135,4 +135,7 @@ public class AdminController {
             }
         });
     }
+    public void otvoriIzvjestaj(ActionEvent actionEvent) throws IOException {
+        InspektorKontroler.otvoriIzvjestaj(tblReports.getSelectionModel().getSelectedItem());
+    }
 }

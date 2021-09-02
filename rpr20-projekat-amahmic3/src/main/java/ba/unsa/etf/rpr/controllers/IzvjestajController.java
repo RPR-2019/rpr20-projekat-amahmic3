@@ -152,12 +152,12 @@ public class IzvjestajController {
             validacijskiListener(fldImePrvog, String::isEmpty);
             validacijskiListener(fldPrezimePrvog, String::isEmpty);
             validacijskiListener(fldEmailPrvog, CreateKorisnikController::validirajEmail);
-            validacijskiListener(fldBrojPrvog, s -> CreateKorisnikController.validirajTelefon(s));
+            validacijskiListener(fldBrojPrvog, CreateKorisnikController::validirajTelefon);
             validacijskiListener(fldIzjavaPrvog, String::isEmpty);
             validacijskiListener(fldImeDrugog, String::isEmpty);
             validacijskiListener(fldPrezimeDrugog, String::isEmpty);
-            validacijskiListener(fldEmailDrugog, s -> CreateKorisnikController.validirajEmail(s));
-            validacijskiListener(fldBrojDrugog, s -> CreateKorisnikController.validirajTelefon(s));
+            validacijskiListener(fldEmailDrugog, CreateKorisnikController::validirajEmail);
+            validacijskiListener(fldBrojDrugog, CreateKorisnikController::validirajTelefon);
             validacijskiListener(fldIzjavaDrugog, String::isEmpty);
             fldPostanskiBroj.focusedProperty().addListener((obs, stari, novi) -> {
                 if (!novi) {
@@ -309,7 +309,7 @@ public class IzvjestajController {
 
             Document document = new Document(pdfDocument);
             Paragraph paragraph = new Paragraph("Izvještaj");
-        document.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA));
+        //document.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA));
             document.add(paragraph.setFontSize(26).setTextAlignment(TextAlignment.CENTER));
             document.add(new Paragraph(bundle.getString("imeIPrezimeInspektora")+izvještaj.getInspektor().getIme()+" "+izvještaj.getInspektor().getPrezime()));
             document.add(new Paragraph(bundle.getString("brojTelefona")+izvještaj.getInspektor().getBrojTelefona()));
@@ -326,8 +326,6 @@ public class IzvjestajController {
             upisiIzjavuSvjedoka(document,getIzvještaj().getDrugi());
 
             document.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
