@@ -49,39 +49,7 @@ public class InspektorKontroler {
     }
     @FXML
     public void initialize(){
-        chbFilteri.setItems(listaOpcija);
-        chbFilteri.getSelectionModel().selectedIndexProperty().addListener((obs,stari,novi)->{
-            if(novi.intValue() == 2){
-                filterDate.setVisible(true);
-                fldFilter.setVisible(false);
-                filterDate.getEditor().clear();
-            }else{
-                fldFilter.clear();
-                filterDate.setVisible(false);
-                fldFilter.setVisible(true);
-            }
-            tblIzvjestaji.setItems(izvjestaji);
-        });
-        fldFilter.textProperty().addListener((obs,stari,novi)->{
-            if(chbFilteri.getSelectionModel().getSelectedIndex()==0){
-                if(novi.length()>0) {
-                    pomocnaLista.clear();
-                    pomocnaLista.addAll(izvjestaji.stream().filter((s) -> s.getObrazovnaInstitucija().getNaziv().startsWith(novi)).collect(Collectors.toList()));
-                    tblIzvjestaji.setItems(pomocnaLista);
-                }else tblIzvjestaji.setItems(izvjestaji);
-            }else{
-                if(novi.length()>0) {
-                    pomocnaLista.clear();
-                    pomocnaLista.addAll(izvjestaji.stream().filter((s) -> (s.getInspektor().getIme()+" "+s.getInspektor().getPrezime()).startsWith(novi)).collect(Collectors.toList()));
-                    tblIzvjestaji.setItems(pomocnaLista);
-                }else tblIzvjestaji.setItems(izvjestaji);
-            }
-        });
-        filterDate.valueProperty().addListener((obs,stari,novi)->{
-                pomocnaLista.clear();
-                pomocnaLista.addAll(izvjestaji.stream().filter((s) -> s.getDatumIzvještaja().toLocalDate().equals(novi)).collect(Collectors.toList()));
-                tblIzvjestaji.setItems(pomocnaLista);
-        });
+        AdminController.postaviFilterZaIzvjestaje(chbFilteri, listaOpcija, filterDate, fldFilter, tblIzvjestaji, izvjestaji, pomocnaLista);
         profilPane.setVisible(true);
         izvjestajiPane.setVisible(false);
         lblIme.setText(inspektor.getIme());

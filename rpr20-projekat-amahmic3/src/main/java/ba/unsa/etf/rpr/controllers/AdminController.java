@@ -10,9 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -21,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
@@ -48,17 +47,25 @@ public class AdminController {
     public TableColumn<Izvještaj,String> rowDatumInspekcije;
     public TableColumn<Izvještaj,String> rowAdresaInstitucije;
     public TableColumn<Izvještaj,String> rowPostanskiBroj;
-    private ObservableList<Izvještaj> izvještaji = FXCollections.observableArrayList();
+    private final ObservableList<Izvještaj> izvjestaji = FXCollections.observableArrayList();
+    public ChoiceBox<String> chBoxIzvjestaji;
+    public ChoiceBox<String> chBoxInspektori;
+    private final ObservableList<String> listaOpcijaIzvjestaji = FXCollections.observableArrayList();
+    private final ObservableList<Izvještaj> pomocnaListaIzvjestaji = FXCollections.observableArrayList();
+    private final ObservableList<Korisnik> pomocnaListaInspektora = FXCollections.observableArrayList();
+    public TextField fldIzvjestajiFilter;
+    public DatePicker filterDate;
+    public TextField fldInspektoriFilter;
+    private final ObservableList<String> listaOpcijaInspektori = FXCollections.observableArrayList();
     public AdminController(Korisnik korisnik){
         admin=korisnik;
         inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
-        izvještaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestaje());
+        izvjestaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestaje());
+        listaOpcijaIzvjestaji.addAll("Naziv obrazovne institucije","Ime i prezime inspektora", "Datum inspekcije");
+        listaOpcijaInspektori.addAll("ID","Ime i prezime","Email adresa");
 
     }
 
-    public AdminController(){
-        inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
-    }
     @FXML
     public void initialize(){
         btnDelete.setDisable(true);
@@ -80,7 +87,7 @@ public class AdminController {
         rowAdresaInstitucije.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().adresaProperty());
         rowPostanskiBroj.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().postanskiBrojProperty());
         rowDatumInspekcije.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getDatumIzvještaja().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))));
-        tblReports.setItems(izvještaji);
+        tblReports.setItems(izvjestaji);
         tblInspektori.getSelectionModel().selectedItemProperty().addListener((obs,stari,novi)->{
             if(novi==null){
                 btnDelete.setDisable(true);
@@ -90,7 +97,76 @@ public class AdminController {
                 btnDelete.setDisable(false);
             }
         });
+        postaviFilterZaIzvjestaje(chBoxIzvjestaji, listaOpcijaIzvjestaji, filterDate, fldIzvjestajiFilter, tblReports, izvjestaji, pomocnaListaIzvjestaji);
+        chBoxInspektori.setItems(listaOpcijaInspektori);
+        chBoxInspektori.getSelectionModel().select(0);
+        chBoxInspektori.getSelectionModel().selectedIndexProperty().addListener((a,b,c)->{
+            fldInspektoriFilter.clear();
+        });
+        fldInspektoriFilter.textProperty().addListener((obs,stari,novi)->{
+            switch (chBoxInspektori.getSelectionModel().getSelectedIndex()){
+                case 0:
+                    if(novi.length()>0) {
+                        pomocnaListaInspektora.clear();
+                        pomocnaListaInspektora.addAll(inspektori.stream().filter(i -> i.getId() == Integer.parseInt(novi)).collect(Collectors.toList()));
+                        tblInspektori.setItems(pomocnaListaInspektora);
+                    }else tblInspektori.setItems(inspektori);
+                    break;
+                case 1:
+                    if(novi.length()>0) {
+                        pomocnaListaInspektora.clear();
+                        pomocnaListaInspektora.addAll(inspektori.stream().filter(i -> (i.getIme()+" "+i.getPrezime()).startsWith(novi)).collect(Collectors.toList()));
+                        tblInspektori.setItems(pomocnaListaInspektora);
+                    }else tblInspektori.setItems(inspektori);
+                    break;
+                case 2:
+                    if(novi.length()>0) {
+                        pomocnaListaInspektora.clear();
+                        pomocnaListaInspektora.addAll(inspektori.stream().filter(i -> i.getEmail().startsWith(novi)).collect(Collectors.toList()));
+                        tblInspektori.setItems(pomocnaListaInspektora);
+                    }else tblInspektori.setItems(inspektori);
+                    break;
+            }
+        });
     }
+
+    static void postaviFilterZaIzvjestaje(ChoiceBox<String> chBoxIzvjestaji, ObservableList<String> listaOpcijaIzvjestaji, DatePicker filterDate, TextField fldIzvjestajiFilter, TableView<Izvještaj> tblReports, ObservableList<Izvještaj> izvjestaji, ObservableList<Izvještaj> pomocnaListaIzvjestaji) {
+        chBoxIzvjestaji.setItems(listaOpcijaIzvjestaji);
+        chBoxIzvjestaji.getSelectionModel().select(0);
+        chBoxIzvjestaji.getSelectionModel().selectedIndexProperty().addListener((obs, stari, novi)->{
+            if(novi.intValue() == 2){
+                filterDate.setVisible(true);
+                fldIzvjestajiFilter.setVisible(false);
+                filterDate.getEditor().clear();
+            }else{
+                fldIzvjestajiFilter.clear();
+                filterDate.setVisible(false);
+                fldIzvjestajiFilter.setVisible(true);
+            }
+            tblReports.setItems(izvjestaji);
+        });
+        fldIzvjestajiFilter.textProperty().addListener((obs, stari, novi)->{
+            if(chBoxIzvjestaji.getSelectionModel().getSelectedIndex()==0){
+                if(novi.length()>0) {
+                    pomocnaListaIzvjestaji.clear();
+                    pomocnaListaIzvjestaji.addAll(izvjestaji.stream().filter((s) -> s.getObrazovnaInstitucija().getNaziv().startsWith(novi)).collect(Collectors.toList()));
+                    tblReports.setItems(pomocnaListaIzvjestaji);
+                }else tblReports.setItems(izvjestaji);
+            }else{
+                if(novi.length()>0) {
+                    pomocnaListaIzvjestaji.clear();
+                    pomocnaListaIzvjestaji.addAll(izvjestaji.stream().filter((s) -> (s.getInspektor().getIme()+" "+s.getInspektor().getPrezime()).startsWith(novi)).collect(Collectors.toList()));
+                    tblReports.setItems(pomocnaListaIzvjestaji);
+                }else tblReports.setItems(izvjestaji);
+            }
+        });
+        filterDate.valueProperty().addListener((obs, stari, novi)->{
+            pomocnaListaIzvjestaji.clear();
+            pomocnaListaIzvjestaji.addAll(izvjestaji.stream().filter((s) -> s.getDatumIzvještaja().toLocalDate().equals(novi)).collect(Collectors.toList()));
+            tblReports.setItems(pomocnaListaIzvjestaji);
+        });
+    }
+
     public void obojiUlaz(MouseEvent actionEvent){
         Button btn = (Button)actionEvent.getSource();
         btn.getStyleClass().removeAll("buttonNotSelected");

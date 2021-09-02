@@ -72,7 +72,7 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </Label>
-            <TextField maxHeight="-Infinity" maxWidth="1000000.0" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+            <TextField fx:id="fldIzvjestajiFilter" maxHeight="-Infinity" maxWidth="1000000.0" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
             <Button fx:id="btnOtvoriIzvjestaj" onAction="#otvoriIzvjestaj" mnemonicParsing="false" text="%open" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
@@ -86,7 +86,7 @@
                </GridPane.margin>
             </Button>
             <ChoiceBox fx:id="chBoxIzvjestaji" maxWidth="150.0" minWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-            <DatePicker visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <DatePicker fx:id="filterDate" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
@@ -127,7 +127,7 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </TableView>
-            <TextField alignment="TOP_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+            <TextField fx:id="fldInspektoriFilter" alignment="TOP_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
@@ -174,7 +174,7 @@
                   <Insets bottom="8.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </Button>
-            <ChoiceBox maxWidth="100.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+            <ChoiceBox fx:id="chBoxInspektori" maxWidth="100.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
