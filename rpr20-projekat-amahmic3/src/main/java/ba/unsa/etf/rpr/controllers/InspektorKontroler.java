@@ -37,6 +37,7 @@ public class InspektorKontroler {
     public TableColumn<Izvještaj,String> rowDatumInspekcije;
     public Button btnIzvjestaji;
     public Button btnProfil;
+    public Button btnOpen;
     public Label lblIme,lblPrezime,lblUsername,lblEmail,lblBrojTelefona;
     public InspektorKontroler(Korisnik inspektor) {
         this.inspektor = inspektor;
@@ -56,8 +57,15 @@ public class InspektorKontroler {
         rowAdresaInstitucije.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().adresaProperty());
         rowPostanskiBroj.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().postanskiBrojProperty());
         rowDatumInspekcije.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getDatumIzvještaja().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))));
-
         tblIzvjestaji.setItems(izvjestaji);
+
+        tblIzvjestaji.getSelectionModel().selectedItemProperty().addListener((obs,stari,novi)->{
+            if(novi!=null){
+                btnOpen.setDisable(false);
+            }else{
+                btnOpen.setDisable(true);
+            }
+        });
     }
     public void kreirajIzvjestaj(ActionEvent actionEvent) throws IOException {
         Stage createWindow = new Stage();
@@ -100,5 +108,14 @@ public class InspektorKontroler {
         Button btn = (Button)actionEvent.getSource();
         btn.getStyleClass().removeAll("buttonHovered");
         btn.getStyleClass().add("buttonNotSelected");
+    }
+    public void otvoriIzvjestaj(ActionEvent actionEvent) throws IOException {
+        Stage createWindow = new Stage();
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/izvjestaj.fxml"),bundle);
+        loader.setController(new IzvjestajController(tblIzvjestaji.getSelectionModel().getSelectedItem()));
+        createWindow.setTitle(bundle.getString("create"));
+        createWindow.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,USE_COMPUTED_SIZE));
+        createWindow.show();
     }
 }
