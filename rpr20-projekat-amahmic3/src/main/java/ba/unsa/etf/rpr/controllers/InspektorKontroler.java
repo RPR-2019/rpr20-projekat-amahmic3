@@ -1,6 +1,7 @@
 package ba.unsa.etf.rpr.controllers;
 
 import ba.unsa.etf.rpr.KorisnikDAO;
+import ba.unsa.etf.rpr.Main;
 import ba.unsa.etf.rpr.models.Izvještaj;
 import ba.unsa.etf.rpr.models.Korisnik;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -18,7 +20,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
@@ -39,9 +40,10 @@ public class InspektorKontroler {
     public Label lblIme,lblPrezime,lblUsername,lblEmail,lblBrojTelefona;
     public ChoiceBox<String> chbFilteri;
     public TextField fldFilter;
-    public DatePicker filterDate;
+    public DatePicker filterPrviDatum,filterZadnjiDatum;
     private ObservableList<String> listaOpcija = FXCollections.observableArrayList();
     private ObservableList<Izvještaj> pomocnaLista = FXCollections.observableArrayList();
+    public  Label lblFrom,lblTo;
     public InspektorKontroler(Korisnik inspektor) {
         this.inspektor = inspektor;
         izvjestaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestajeOdInspektora(inspektor));
@@ -49,7 +51,9 @@ public class InspektorKontroler {
     }
     @FXML
     public void initialize(){
-        AdminController.postaviFilterZaIzvjestaje(chbFilteri, listaOpcija, filterDate, fldFilter, tblIzvjestaji, izvjestaji, pomocnaLista);
+        btnOpen.setDisable(true);
+
+        AdminController.postaviFilterZaIzvjestaje(chbFilteri, listaOpcija, filterPrviDatum, filterZadnjiDatum,fldFilter, tblIzvjestaji, izvjestaji, pomocnaLista,lblFrom,lblTo);
         profilPane.setVisible(true);
         izvjestajiPane.setVisible(false);
         lblIme.setText(inspektor.getIme());
@@ -71,6 +75,10 @@ public class InspektorKontroler {
                 btnOpen.setDisable(true);
             }
         });
+    }
+    public void odjaviSe(ActionEvent actionEvent) throws IOException {
+        ((Stage)((Node)actionEvent.getSource()).getScene().getWindow()).close();
+        Main.otvoriLoginProzor(new Stage());
     }
     public void kreirajIzvjestaj(ActionEvent actionEvent) throws IOException {
         Stage createWindow = new Stage();

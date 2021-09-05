@@ -23,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.stage.Stage;
 
 import javax.swing.text.StyleConstants;
@@ -102,7 +103,8 @@ public class IzvjestajController {
             fldIzjavaDrugog.setEditable(false);
             fldSati.setEditable(false);
             fldMinute.setEditable(false);
-            fldDatum.getEditor().setDisable(true);
+            fldDatum.setDisable(true);
+            fldDatum.setOpacity(1);
             fldDatum.setValue(izvještaj.getDatumIzvještaja().toLocalDate());
             fldSati.setText(Integer.toString(izvještaj.getDatumIzvještaja().getHour()));
             fldMinute.setText(Integer.toString(izvještaj.getDatumIzvještaja().getMinute()));
@@ -290,6 +292,10 @@ public class IzvjestajController {
     public void kreirajIzvjestaj(ActionEvent actionEvent){
         trebaKreirati=true;
         izvještaj.setDatumIzvještaja(LocalDateTime.of(fldDatum.getValue(), LocalTime.of(Integer.parseInt(fldSati.textProperty().getValue()),Integer.parseInt(fldMinute.textProperty().getValue()))));
+        ((Stage)root.getScene().getWindow()).close();
+    }
+    public void ugasiProzor(ActionEvent actionEvent){
+        trebaKreirati=false;
         ((Stage)root.getScene().getWindow()).close();
     }
 

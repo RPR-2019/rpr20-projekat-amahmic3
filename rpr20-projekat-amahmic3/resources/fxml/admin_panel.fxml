@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@/css/adminPanel.css" />
     </stylesheets>
@@ -41,6 +41,7 @@
         <rowConstraints>
           <RowConstraints minHeight="15.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="15.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="15.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -54,7 +55,7 @@
                   <Insets left="2.0" top="2.0" />
                </GridPane.margin>
             </Label>
-            <TableView fx:id="tblReports" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
+            <TableView fx:id="tblReports" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" GridPane.rowSpan="2">
               <columns>
                 <TableColumn fx:id="rowIDIzvjestaja" prefWidth="75.0" text="ID" />
                 <TableColumn fx:id="rowObrazovnaInstitucija" prefWidth="75.0" text="%obrazovnaInstitucija" />
@@ -67,13 +68,19 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </TableView>
-            <Label text="%filter" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+            <Label text="%filter" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </Label>
-            <TextField fx:id="fldIzvjestajiFilter" maxHeight="-Infinity" maxWidth="1000000.0" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-            <Button fx:id="btnOtvoriIzvjestaj" onAction="#otvoriIzvjestaj" mnemonicParsing="false" text="%open" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+            <TextField fx:id="fldIzvjestajiFilter" maxHeight="-Infinity" maxWidth="1000000.0" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </GridPane.margin></TextField>
+            <Button fx:id="btnOtvoriIzvjestaj" mnemonicParsing="false" onAction="#otvoriIzvjestaj" text="%open" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -85,12 +92,22 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </Button>
-            <ChoiceBox fx:id="chBoxIzvjestaji" maxWidth="150.0" minWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-            <DatePicker fx:id="filterDate" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <ChoiceBox fx:id="chBoxIzvjestaji" maxWidth="150.0" minWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </GridPane.margin></ChoiceBox>
+            <DatePicker fx:id="filterPrviDate" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </DatePicker>
+            <DatePicker fx:id="filterZadnjiDate" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </GridPane.margin>
+            </DatePicker>
+            <Label fx:id="fldFrom" text="%from" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Label fx:id="fldTo" text="%to" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <GridPane fx:id="inspektoriPane" hgap="4.0" vgap="4.0" visible="false" GridPane.columnIndex="1" GridPane.rowSpan="3">
@@ -207,7 +224,7 @@
                   <Insets left="50.0" />
                </padding>
             </Button>
-            <Button fx:id="btnOdjava" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%odjava">
+            <Button fx:id="btnOdjava" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onAction="#odjaviSe" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%odjava">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>

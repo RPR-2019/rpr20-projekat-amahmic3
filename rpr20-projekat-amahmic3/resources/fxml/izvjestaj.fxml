@@ -320,7 +320,7 @@
        <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="12">
            <buttons>
                <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#kreirajIzvjestaj" text="%create" />
-               <Button fx:id="btnCancel" mnemonicParsing="false" text="%cancel" />
+               <Button fx:id="btnCancel" onAction="#ugasiProzor" mnemonicParsing="false" text="%cancel" />
            </buttons>
            <GridPane.margin>
                <Insets right="4.0" />

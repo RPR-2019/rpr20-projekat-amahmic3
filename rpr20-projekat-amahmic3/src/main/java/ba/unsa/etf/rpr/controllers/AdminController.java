@@ -1,6 +1,7 @@
 package ba.unsa.etf.rpr.controllers;
 
 import ba.unsa.etf.rpr.KorisnikDAO;
+import ba.unsa.etf.rpr.Main;
 import ba.unsa.etf.rpr.models.Izvještaj;
 import ba.unsa.etf.rpr.models.Korisnik;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,7 +19,12 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -54,9 +61,12 @@ public class AdminController {
     private final ObservableList<Izvještaj> pomocnaListaIzvjestaji = FXCollections.observableArrayList();
     private final ObservableList<Korisnik> pomocnaListaInspektora = FXCollections.observableArrayList();
     public TextField fldIzvjestajiFilter;
-    public DatePicker filterDate;
+    public DatePicker filterPrviDate, filterZadnjiDate;
     public TextField fldInspektoriFilter;
     private final ObservableList<String> listaOpcijaInspektori = FXCollections.observableArrayList();
+    public Button btnOtvoriIzvjestaj;
+    public Button btnOdjava;
+    public Label lblFrom,lblTo;
     public AdminController(Korisnik korisnik){
         admin=korisnik;
         inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
@@ -73,14 +83,18 @@ public class AdminController {
         odabraniButton = btnInspektori;
         izvjestajiPane.setVisible(false);
         inspektoriPane.setVisible(true);
-
+        btnOtvoriIzvjestaj.setDisable(true);
         rowID.setCellValueFactory(new PropertyValueFactory<>("id"));
         rowIme.setCellValueFactory(new PropertyValueFactory<>("ime"));
         rowPrezime.setCellValueFactory(new PropertyValueFactory<>("prezime"));
         rowEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         rowUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         tblInspektori.setItems(inspektori);
-
+        tblReports.getSelectionModel().selectedItemProperty().addListener((obs,stari,novi)->{
+            if(novi==null){
+                btnOtvoriIzvjestaj.setDisable(true);
+            }else btnOtvoriIzvjestaj.setDisable(false);
+        });
         rowIDIzvjestaja.setCellValueFactory(i -> i.getValue().idProperty());
         rowObrazovnaInstitucija.setCellValueFactory(i -> i.getValue().getObrazovnaInstitucija().nazivProperty());
         rowInspektor.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getInspektor().getIme()+" "+i.getValue().getInspektor().getPrezime()));
@@ -97,12 +111,13 @@ public class AdminController {
                 btnDelete.setDisable(false);
             }
         });
-        postaviFilterZaIzvjestaje(chBoxIzvjestaji, listaOpcijaIzvjestaji, filterDate, fldIzvjestajiFilter, tblReports, izvjestaji, pomocnaListaIzvjestaji);
+        postaviFilterZaIzvjestaje(chBoxIzvjestaji, listaOpcijaIzvjestaji, filterPrviDate, filterZadnjiDate, fldIzvjestajiFilter, tblReports, izvjestaji, pomocnaListaIzvjestaji,lblFrom,lblTo);
         chBoxInspektori.setItems(listaOpcijaInspektori);
         chBoxInspektori.getSelectionModel().select(0);
         chBoxInspektori.getSelectionModel().selectedIndexProperty().addListener((a,b,c)->{
             fldInspektoriFilter.clear();
         });
+
         fldInspektoriFilter.textProperty().addListener((obs,stari,novi)->{
             switch (chBoxInspektori.getSelectionModel().getSelectedIndex()){
                 case 0:
@@ -130,17 +145,24 @@ public class AdminController {
         });
     }
 
-    static void postaviFilterZaIzvjestaje(ChoiceBox<String> chBoxIzvjestaji, ObservableList<String> listaOpcijaIzvjestaji, DatePicker filterDate, TextField fldIzvjestajiFilter, TableView<Izvještaj> tblReports, ObservableList<Izvještaj> izvjestaji, ObservableList<Izvještaj> pomocnaListaIzvjestaji) {
+    static void postaviFilterZaIzvjestaje(ChoiceBox<String> chBoxIzvjestaji, ObservableList<String> listaOpcijaIzvjestaji, DatePicker filterDateFrom,DatePicker filterDateTo, TextField fldIzvjestajiFilter, TableView<Izvještaj> tblReports, ObservableList<Izvještaj> izvjestaji, ObservableList<Izvještaj> pomocnaListaIzvjestaji,Label from,Label to) {
         chBoxIzvjestaji.setItems(listaOpcijaIzvjestaji);
         chBoxIzvjestaji.getSelectionModel().select(0);
         chBoxIzvjestaji.getSelectionModel().selectedIndexProperty().addListener((obs, stari, novi)->{
             if(novi.intValue() == 2){
-                filterDate.setVisible(true);
+                filterDateFrom.setVisible(true);
+                filterDateTo.setVisible(true);
                 fldIzvjestajiFilter.setVisible(false);
-                filterDate.getEditor().clear();
+                from.setVisible(true);
+                to.setVisible(true);
+                filterDateFrom.getEditor().clear();
+                filterDateTo.getEditor().clear();
             }else{
+                from.setVisible(false);
+                to.setVisible(false);
                 fldIzvjestajiFilter.clear();
-                filterDate.setVisible(false);
+                filterDateFrom.setVisible(false);
+                filterDateTo.setVisible(false);
                 fldIzvjestajiFilter.setVisible(true);
             }
             tblReports.setItems(izvjestaji);
@@ -160,13 +182,26 @@ public class AdminController {
                 }else tblReports.setItems(izvjestaji);
             }
         });
-        filterDate.valueProperty().addListener((obs, stari, novi)->{
-            pomocnaListaIzvjestaji.clear();
-            pomocnaListaIzvjestaji.addAll(izvjestaji.stream().filter((s) -> s.getDatumIzvještaja().toLocalDate().equals(novi)).collect(Collectors.toList()));
-            tblReports.setItems(pomocnaListaIzvjestaji);
+        filterDateFrom.valueProperty().addListener((obs, stari, novi)->{
+            if(filterDateTo.getValue()!=null)
+            dateListener(filterDateFrom, filterDateTo, tblReports, izvjestaji, pomocnaListaIzvjestaji);
+        });
+        filterDateTo.valueProperty().addListener((obs, stari, novi)->{
+            if(filterDateFrom.getValue()!=null)
+            dateListener(filterDateFrom, filterDateTo, tblReports, izvjestaji, pomocnaListaIzvjestaji);
         });
     }
 
+    private static void dateListener(DatePicker filterDateFrom, DatePicker filterDateTo, TableView<Izvještaj> tblReports, ObservableList<Izvještaj> izvjestaji, ObservableList<Izvještaj> pomocnaListaIzvjestaji) {
+        pomocnaListaIzvjestaji.clear();
+        pomocnaListaIzvjestaji.addAll(izvjestaji.stream().filter((s) ->  dateBetween(s.getDatumIzvještaja().toLocalDate(),filterDateFrom.getValue(),filterDateTo.getValue())).collect(Collectors.toList()));
+        tblReports.setItems(pomocnaListaIzvjestaji);
+
+    }
+
+    private static boolean dateBetween(LocalDate date, LocalDate dateBefore,LocalDate dateAfter){
+        return dateBefore.isBefore(dateAfter)&&((date.isAfter(dateBefore) && date.isBefore(dateAfter)) || (date.equals(dateBefore) || date.equals(dateAfter)));
+    }
     public void obojiUlaz(MouseEvent actionEvent){
         Button btn = (Button)actionEvent.getSource();
         btn.getStyleClass().removeAll("buttonNotSelected");
@@ -214,4 +249,10 @@ public class AdminController {
     public void otvoriIzvjestaj(ActionEvent actionEvent) throws IOException {
         InspektorKontroler.otvoriIzvjestaj(tblReports.getSelectionModel().getSelectedItem());
     }
+    public void odjaviSe(ActionEvent actionEvent) throws IOException {
+        ((Stage)((Node)actionEvent.getSource()).getScene().getWindow()).close();
+        Main.otvoriLoginProzor(new Stage());
+    }
+
+
 }
