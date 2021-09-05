@@ -25,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.stage.Stage;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.swing.text.StyleConstants;
 import java.io.*;
@@ -153,12 +154,12 @@ public class IzvjestajController {
             validacijskiListener(fldIzvjestaj, String::isEmpty);
             validacijskiListener(fldImePrvog, String::isEmpty);
             validacijskiListener(fldPrezimePrvog, String::isEmpty);
-            validacijskiListener(fldEmailPrvog, CreateKorisnikController::validirajEmail);
+            validacijskiListener(fldEmailPrvog, IzvjestajController::validirajEmail);
             validacijskiListener(fldBrojPrvog, CreateKorisnikController::validirajTelefon);
             validacijskiListener(fldIzjavaPrvog, String::isEmpty);
             validacijskiListener(fldImeDrugog, String::isEmpty);
             validacijskiListener(fldPrezimeDrugog, String::isEmpty);
-            validacijskiListener(fldEmailDrugog, CreateKorisnikController::validirajEmail);
+            validacijskiListener(fldEmailDrugog, IzvjestajController::validirajEmail);
             validacijskiListener(fldBrojDrugog, CreateKorisnikController::validirajTelefon);
             validacijskiListener(fldIzjavaDrugog, String::isEmpty);
             fldPostanskiBroj.focusedProperty().addListener((obs, stari, novi) -> {
@@ -182,7 +183,9 @@ public class IzvjestajController {
             validacijskiListener(fldMinute, this::validirajMinute);
         }
     }
-
+    private static boolean validirajEmail(String email){
+        return !EmailValidator.getInstance().isValid(email);
+    }
     private void validirajInstituciju() {
         fldNazivInstitucije.getStyleClass().removeAll("poljeNijeIspravno");
         fldAdresaInstitucije.getStyleClass().removeAll("poljeNijeIspravno");

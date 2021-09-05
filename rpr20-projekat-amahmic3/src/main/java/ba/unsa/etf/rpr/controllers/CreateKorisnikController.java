@@ -27,8 +27,8 @@ public class CreateKorisnikController {
     public Button btnCreate;
     private boolean trebaKreirati = false;
     private final ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-    public static boolean validirajEmail(String email){
-        return !EmailValidator.getInstance().isValid(email);
+    private static boolean validirajEmail(String email){
+        return !EmailValidator.getInstance().isValid(email) || KorisnikDAO.getInstance().postojiLiEmail(email);
     }
     @FXML
     public void initialize(){
@@ -75,14 +75,14 @@ public class CreateKorisnikController {
          return KorisnikDAO.getInstance().provjeriUsername(username) && !username.isEmpty();
     }
     public static boolean validirajTelefon(String brTelefona){
-        return !brTelefona.matches("[0-9]+");
+        return !brTelefona.matches("[0-9]+") && !KorisnikDAO.getInstance().postojiLiBrojTelefona(brTelefona);
     }
 
     public void validacijskiListener(TextField textField, Predicate<String> predikat)
     {
         textField.focusedProperty().addListener((obs,oldState,newState)->{
             if(!newState){
-                if(textField.textProperty().getValue()==null ){
+                if(textField.textProperty().getValue()==null || textField.textProperty().getValue().isEmpty() ){
                     textField.getStyleClass().removeAll("poljeIspravno");
                     textField.getStyleClass().removeAll("poljeNijeIspravno");
                     btnCreate.setDisable(true);

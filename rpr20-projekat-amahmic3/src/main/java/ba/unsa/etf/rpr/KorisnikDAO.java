@@ -21,6 +21,9 @@ public class KorisnikDAO {
     private PreparedStatement dajKorisnikaID;
     private PreparedStatement dajBrojInspektora;
     private PreparedStatement obrazovnaInstitucijaSuggestion;
+    private PreparedStatement emailPostoji;
+    private PreparedStatement telefonPostoji;
+    private PreparedStatement dajIdOdKorisnika;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -46,6 +49,9 @@ public class KorisnikDAO {
         dajKorisnikaID = conn.prepareStatement("SELECT ime,prezime,brojTelefona,email,administrator,username,password FROM Korisnik WHERE id = ?");
         dajBrojInspektora = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik");
         obrazovnaInstitucijaSuggestion = conn.prepareStatement("SELECT ID, Naziv, Adresa, BrojTelefona, PostanskiBroj FROM ObrazovnaInstitucija WHERE Naziv LIKE ?");
+        emailPostoji = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik WHERE email LIKE ?");
+        telefonPostoji = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik WHERE brojTelefona LIKE ?");
+        dajIdOdKorisnika = conn.prepareStatement("SELECT ID FROM Korisnik WHERE username = ?");
     }
     private KorisnikDAO(){
         try {
@@ -125,6 +131,13 @@ public class KorisnikDAO {
             dodajInspektoraUpit.setString(5,inspektor.getUsername());
             dodajInspektoraUpit.setString(6,inspektor.getPassword());
             dodajInspektoraUpit.executeUpdate();
+            dajIdOdKorisnika.setString(1,inspektor.getUsername());
+            ResultSet rs = dajIdOdKorisnika.executeQuery();
+            if(rs.next()){
+                inspektor.setId(rs.getInt(1));
+            }else{
+                throw new Exception("Hairs");
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -267,5 +280,26 @@ public class KorisnikDAO {
         }
         return povratna;
     }
-
+    public  boolean postojiLiEmail(String email){
+        int brMailova=0;
+        try {
+            emailPostoji.setString(1,email);
+            ResultSet rs =emailPostoji.executeQuery();
+            if(rs.next()) brMailova=rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return brMailova!=0;
+    }
+    public boolean postojiLiBrojTelefona(String brojTelefona){
+        int brTelefona=0;
+        try {
+            telefonPostoji.setString(1,brojTelefona);
+            ResultSet rs =emailPostoji.executeQuery();
+            if(rs.next()) brTelefona=rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return brTelefona!=0;
+    }
 }
