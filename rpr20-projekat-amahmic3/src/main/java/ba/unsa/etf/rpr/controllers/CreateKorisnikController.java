@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -16,7 +17,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 public class CreateKorisnikController {
-    private final Korisnik noviKorisnik = new Korisnik();
+    private Korisnik noviKorisnik;
     public Parent rootPane;
     public TextField fldIme;
     public TextField fldPrezime;
@@ -25,11 +26,23 @@ public class CreateKorisnikController {
     public TextField fldUsername;
     public TextField fldPassword;
     public Button btnCreate;
+    public CheckBox chBoxAdministrator;
     private boolean trebaKreirati = false;
+    private boolean edit = false;
     private final ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-    private static boolean validirajEmail(String email){
-        return !EmailValidator.getInstance().isValid(email) || KorisnikDAO.getInstance().postojiLiEmail(email);
+    private boolean validirajEmail(String email){
+        return !EmailValidator.getInstance().isValid(email) || KorisnikDAO.getInstance().postojiLiEmail(email,noviKorisnik.getId());
     }
+
+    public CreateKorisnikController() {
+        noviKorisnik=new Korisnik();
+    }
+
+    public CreateKorisnikController(Korisnik noviKorisnik) {
+        this.noviKorisnik = noviKorisnik;
+        edit = true;
+    }
+
     @FXML
     public void initialize(){
         onChangeListener(fldIme);
@@ -48,13 +61,13 @@ public class CreateKorisnikController {
 
         validacijskiListener(fldIme, String::isEmpty);
         validacijskiListener(fldPrezime, String::isEmpty);
-        validacijskiListener(fldEmail, CreateKorisnikController::validirajEmail);
-        validacijskiListener(fldBrojTelefona, CreateKorisnikController::validirajTelefon);
+        validacijskiListener(fldEmail, s-> !validirajEmail(s));
+        validacijskiListener(fldBrojTelefona, this::validirajTelefon);
         validacijskiListener(fldUsername,s->!validirajUsername(s));
+        validacijskiListener(fldPassword,String::isEmpty);
         fldPassword.textProperty().addListener((obs,oldState,newState)->{
            if(newState.isEmpty()){
                fldPassword.getStyleClass().removeAll("poljeIspravno");
-               fldPassword.getStyleClass().add("poljeNijeIspravno");
                btnCreate.setDisable(true);
            }else {
                fldPassword.getStyleClass().removeAll("poljeNijeIspravno");
@@ -62,7 +75,21 @@ public class CreateKorisnikController {
                if(btnCreate.isDisabled()&&sviValidni()) btnCreate.setDisable(false);
            }
         });
-        btnCreate.setDisable(true);
+
+        if(edit){
+            btnCreate.setDisable(false);
+            btnCreate.setText(bundle.getString("edit"));
+            fldIme.getStyleClass().add("poljeIspravno");
+            fldPrezime.getStyleClass().add("poljeIspravno");
+            fldPassword.getStyleClass().add("poljeIspravno");
+            fldEmail.getStyleClass().add("poljeIspravno");
+            fldUsername.getStyleClass().add("poljeIspravno");
+            fldPassword.getStyleClass().add("poljeIspravno");
+            fldBrojTelefona.getStyleClass().add("poljeIspravno");
+
+        }else{
+            btnCreate.setDisable(true);
+        }
     }
     private void onChangeListener(TextField textField){
         textField.textProperty().addListener((obs,novo,staro)->{
@@ -72,10 +99,10 @@ public class CreateKorisnikController {
         });
     }
     public boolean validirajUsername(String username){
-         return KorisnikDAO.getInstance().provjeriUsername(username) && !username.isEmpty();
+         return KorisnikDAO.getInstance().provjeriUsername(username,noviKorisnik.getId()) && !username.isEmpty();
     }
-    public static boolean validirajTelefon(String brTelefona){
-        return !brTelefona.matches("[0-9]+") && !KorisnikDAO.getInstance().postojiLiBrojTelefona(brTelefona);
+    public boolean validirajTelefon(String brTelefona){
+        return !brTelefona.matches("[0-9]+") && !KorisnikDAO.getInstance().postojiLiBrojTelefona(brTelefona,noviKorisnik.getId());
     }
 
     public void validacijskiListener(TextField textField, Predicate<String> predikat)
@@ -125,6 +152,7 @@ public class CreateKorisnikController {
     }
     public void kreirajKorisnika(ActionEvent actionEvent){
         trebaKreirati= true;
+        noviKorisnik.setAdministrator(chBoxAdministrator.isSelected());
         ((Stage)rootPane.getScene().getWindow()).close();
     }
     public boolean isTrebaKreirati(){
@@ -133,6 +161,7 @@ public class CreateKorisnikController {
     public Korisnik getNoviKorisnik() {
         return noviKorisnik;
     }
+    public boolean isEdit() {return edit;}
 
     public void cancelKreiranje(ActionEvent actionEvent){
         ((Stage)rootPane.getScene().getWindow()).close();

@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS "Korisnik" (
                                           "email"	TEXT UNIQUE,
                                           "brojTelefona"	TEXT UNIQUE,
                                           "administrator"	INTEGER,
+                                          "obrisan" INTEGER,
                                           PRIMARY KEY("id")
     );
 CREATE TABLE IF NOT EXISTS "ObrazovnaInstitucija" (
@@ -37,5 +38,5 @@ CREATE TABLE IF NOT EXISTS "IzjavaSvjedoka" (
                                                 "Izjava"	TEXT,
                                                 PRIMARY KEY("ID")
     );
-INSERT INTO Korisnik(username,password,administrator) VALUES ("admin","admin",1);
+INSERT INTO Korisnik(username,password,administrator,obrisan) VALUES ("admin","admin",1,0);
 COMMIT;

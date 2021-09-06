@@ -14,7 +14,9 @@ public class Korisnik {
     private SimpleStringProperty password = new SimpleStringProperty("");
     private SimpleBooleanProperty administrator= new SimpleBooleanProperty(false);
 
-   public Korisnik(){
+
+
+    public Korisnik(){
        id.setValue(0);
        ime.setValue("");
        prezime.setValue("");

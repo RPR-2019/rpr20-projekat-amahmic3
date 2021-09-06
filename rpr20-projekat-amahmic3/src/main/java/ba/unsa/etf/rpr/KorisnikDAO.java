@@ -24,6 +24,9 @@ public class KorisnikDAO {
     private PreparedStatement emailPostoji;
     private PreparedStatement telefonPostoji;
     private PreparedStatement dajIdOdKorisnika;
+    private PreparedStatement dajUsernamoveKojiPocinju;
+    private PreparedStatement azurirajInspektoraUpit;
+    private PreparedStatement obrisiInspektoraUpit;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -32,10 +35,10 @@ public class KorisnikDAO {
         return instance;
     }
     private void spremiUpite() throws SQLException {
-        korisnikUpit = conn.prepareStatement("SELECT id,ime,prezime,brojTelefona,email,administrator FROM Korisnik WHERE username = ? AND password = ?");
-        usernameAvailableUpit = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik WHERE username LIKE ?");
-        dodajInspektoraUpit = conn.prepareStatement("INSERT INTO Korisnik(ime,prezime,email,brojTelefona,username,password,administrator) VALUES(?,?,?,?,?,?,0)");
-        dajInspektoreUpit = conn.prepareStatement("SELECT id,ime,prezime,brojTelefona,email,administrator,username,password FROM Korisnik WHERE administrator = 0");
+        korisnikUpit = conn.prepareStatement("SELECT id,ime,prezime,brojTelefona,email,administrator,obrisan FROM Korisnik WHERE username = ? AND password = ?");
+        usernameAvailableUpit = conn.prepareStatement("SELECT ID FROM Korisnik WHERE username LIKE ?");
+        dodajInspektoraUpit = conn.prepareStatement("INSERT INTO Korisnik(ime,prezime,email,brojTelefona,username,password,administrator,obrisan) VALUES(?,?,?,?,?,?,?,0)");
+        dajInspektoreUpit = conn.prepareStatement("SELECT id,ime,prezime,brojTelefona,email,administrator,username,password,obrisan FROM Korisnik");
         upisiObrazovnuInstitucijuUpit = conn.prepareStatement("INSERT INTO ObrazovnaInstitucija(Naziv,Adresa,PostanskiBroj,BrojTelefona) VALUES (?,?,?,?)");
         upisiIzjavuSvjedokaUpit = conn.prepareStatement("INSERT INTO IzjavaSvjedoka(Ime,Prezime,Email,BrojTelefona,Izjava) VALUES (?,?,?,?,?)");
         upisiIzvjestajUpit = conn.prepareStatement("INSERT INTO Izvjestaj(inspektorID,obrazovnaInstitucijaID,izjavaPrvogSvjedokaID,izjavaDrugogSvjedokaID,Opis,DatumIVrijeme) VALUES" +
@@ -46,12 +49,15 @@ public class KorisnikDAO {
         dajObrazovnuInstitucijuID = conn.prepareStatement("SELECT Naziv,Adresa,PostanskiBroj,BrojTelefona FROM ObrazovnaInstitucija WHERE ID = ?");
         dajIzjavuSvjedokaID= conn.prepareStatement("SELECT Ime,Prezime,Email,BrojTelefona,Izjava FROM IzjavaSvjedoka WHERE ID = ?");
         dajBrojIzjavaSvjedoka = conn.prepareStatement("SELECT COUNT(*) FROM IzjavaSvjedoka");
-        dajKorisnikaID = conn.prepareStatement("SELECT ime,prezime,brojTelefona,email,administrator,username,password FROM Korisnik WHERE id = ?");
+        dajKorisnikaID = conn.prepareStatement("SELECT ime,prezime,brojTelefona,email,administrator,username,password,obrisan FROM Korisnik WHERE id = ?");
         dajBrojInspektora = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik");
         obrazovnaInstitucijaSuggestion = conn.prepareStatement("SELECT ID, Naziv, Adresa, BrojTelefona, PostanskiBroj FROM ObrazovnaInstitucija WHERE Naziv LIKE ?");
-        emailPostoji = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik WHERE email LIKE ?");
-        telefonPostoji = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik WHERE brojTelefona LIKE ?");
+        emailPostoji = conn.prepareStatement("SELECT ID FROM Korisnik WHERE email LIKE ?");
+        telefonPostoji = conn.prepareStatement("SELECT ID FROM Korisnik WHERE brojTelefona LIKE ?");
         dajIdOdKorisnika = conn.prepareStatement("SELECT ID FROM Korisnik WHERE username = ?");
+        dajUsernamoveKojiPocinju = conn.prepareStatement("SELECT username FROM Korisnik WHERE username LIKE ?");
+        azurirajInspektoraUpit = conn.prepareStatement("UPDATE Korisnik SET ime = ?, prezime = ?, brojTelefona = ?, email = ?, username = ?, password = ?, administrator =? WHERE ID = ?");
+        obrisiInspektoraUpit= conn.prepareStatement("UPDATE Korisnik SET obrisan=1 WHERE ID=?");
     }
     private KorisnikDAO(){
         try {
@@ -74,6 +80,7 @@ public class KorisnikDAO {
             korisnikUpit.setString(2,password);
             ResultSet rs= korisnikUpit.executeQuery();
             if(rs.next()){
+                if(rs.getInt(7)!=1)
              povratniKorisnik = new Korisnik(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5), rs.getInt(6) == 1,username,password);
             }
         } catch (SQLException throwables) {
@@ -96,13 +103,14 @@ public class KorisnikDAO {
             e.printStackTrace();
         }
     }
-    public boolean provjeriUsername(String username){
+    public boolean provjeriUsername(String username, int id){
         boolean povratni = true;
         try {
             usernameAvailableUpit.setString(1,username);
             ResultSet rs = usernameAvailableUpit.executeQuery();
-            rs.next();
-            if(rs.getInt(1)!=0) povratni= false;
+            if(rs.next() && rs.getInt(1)!=id){
+                povratni=false;
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -110,17 +118,21 @@ public class KorisnikDAO {
         return povratni;
     }
     public int generisiUsername(String username){
-        int povratni = 1;
+        int povratni = 0;
         try {
-            usernameAvailableUpit.setString(1,username);
-            ResultSet rs = usernameAvailableUpit.executeQuery();
-            rs.next();
-            povratni = rs.getInt(1)+1;
-
+            dajUsernamoveKojiPocinju.setString(1,username);
+            ResultSet rs = dajUsernamoveKojiPocinju.executeQuery();
+            while(rs.next()){
+                 String sufiks = rs.getString(1).substring(username.length()-1);
+                 int broj;
+                 if(!sufiks.isEmpty() && sufiks.matches("[0-9]*") && (broj =Integer.parseInt(sufiks))>povratni){
+                    povratni=broj;
+                 }
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return povratni;
+        return povratni+1;
     }
     public void kreirajInspektora(Korisnik inspektor){
         try{
@@ -130,6 +142,7 @@ public class KorisnikDAO {
             dodajInspektoraUpit.setString(4,inspektor.getBrojTelefona());
             dodajInspektoraUpit.setString(5,inspektor.getUsername());
             dodajInspektoraUpit.setString(6,inspektor.getPassword());
+            dodajInspektoraUpit.setInt(7,inspektor.isAdministrator() ? 1 : 0);
             dodajInspektoraUpit.executeUpdate();
             dajIdOdKorisnika.setString(1,inspektor.getUsername());
             ResultSet rs = dajIdOdKorisnika.executeQuery();
@@ -147,6 +160,7 @@ public class KorisnikDAO {
         try {
             ResultSet rs = dajInspektoreUpit.executeQuery();
             while(rs.next()){
+                if(rs.getInt(9)!=1)
                 povratnaLista.add(new Korisnik(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),false,rs.getString(7),rs.getString(8)));
             }
         } catch (SQLException throwables) {
@@ -280,26 +294,52 @@ public class KorisnikDAO {
         }
         return povratna;
     }
-    public  boolean postojiLiEmail(String email){
-        int brMailova=0;
+    public  boolean postojiLiEmail(String email, int id){
+        boolean brMailova=true;
         try {
             emailPostoji.setString(1,email);
             ResultSet rs =emailPostoji.executeQuery();
-            if(rs.next()) brMailova=rs.getInt(1);
+            if(rs.next() && rs.getInt(1)!=id){
+                brMailova=false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return brMailova!=0;
+        return brMailova;
     }
-    public boolean postojiLiBrojTelefona(String brojTelefona){
-        int brTelefona=0;
+    public boolean postojiLiBrojTelefona(String brojTelefona, int id){
+        boolean telefonValidan=true;
         try {
             telefonPostoji.setString(1,brojTelefona);
-            ResultSet rs =emailPostoji.executeQuery();
-            if(rs.next()) brTelefona=rs.getInt(1);
+            ResultSet rs = telefonPostoji.executeQuery();
+            if(rs.next() && rs.getInt(1)!=id) telefonValidan=false;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return brTelefona!=0;
+        return telefonValidan;
+    }
+    public void azurirajInspektora(Korisnik k){
+        try {
+            azurirajInspektoraUpit.setString(1,k.getIme());
+            azurirajInspektoraUpit.setString(2,k.getPrezime());
+            azurirajInspektoraUpit.setString(3,k.getBrojTelefona());
+            azurirajInspektoraUpit.setString(4,k.getEmail());
+            azurirajInspektoraUpit.setString(5,k.getUsername());
+            azurirajInspektoraUpit.setString(6,k.getPassword());
+            azurirajInspektoraUpit.setInt(7,k.isAdministrator()?1:0);
+            azurirajInspektoraUpit.setInt(8,k.getId());
+            azurirajInspektoraUpit.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void obrisiInspektora(Korisnik k){
+        try {
+            obrisiInspektoraUpit.setInt(1,k.getId());
+            obrisiInspektoraUpit.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }

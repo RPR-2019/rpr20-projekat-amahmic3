@@ -150,17 +150,17 @@ public class IzvjestajController {
             });
             validacijskiListener(fldNazivInstitucije, String::isEmpty);
             validacijskiListener(fldAdresaInstitucije, String::isEmpty);
-            validacijskiListener(fldTelefonInstitucije, CreateKorisnikController::validirajTelefon);
+            validacijskiListener(fldTelefonInstitucije, this::validirajTelefon);
             validacijskiListener(fldIzvjestaj, String::isEmpty);
             validacijskiListener(fldImePrvog, String::isEmpty);
             validacijskiListener(fldPrezimePrvog, String::isEmpty);
             validacijskiListener(fldEmailPrvog, IzvjestajController::validirajEmail);
-            validacijskiListener(fldBrojPrvog, CreateKorisnikController::validirajTelefon);
+            validacijskiListener(fldBrojPrvog, this::validirajTelefon);
             validacijskiListener(fldIzjavaPrvog, String::isEmpty);
             validacijskiListener(fldImeDrugog, String::isEmpty);
             validacijskiListener(fldPrezimeDrugog, String::isEmpty);
             validacijskiListener(fldEmailDrugog, IzvjestajController::validirajEmail);
-            validacijskiListener(fldBrojDrugog, CreateKorisnikController::validirajTelefon);
+            validacijskiListener(fldBrojDrugog, this::validirajTelefon);
             validacijskiListener(fldIzjavaDrugog, String::isEmpty);
             fldPostanskiBroj.focusedProperty().addListener((obs, stari, novi) -> {
                 if (!novi) {
@@ -183,6 +183,11 @@ public class IzvjestajController {
             validacijskiListener(fldMinute, this::validirajMinute);
         }
     }
+
+    private boolean validirajTelefon(String s) {
+            return !s.matches("[0-9]+");
+    }
+
     private static boolean validirajEmail(String email){
         return !EmailValidator.getInstance().isValid(email);
     }

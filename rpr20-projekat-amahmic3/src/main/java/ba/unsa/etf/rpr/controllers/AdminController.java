@@ -20,11 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
-import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -67,6 +63,7 @@ public class AdminController {
     public Button btnOtvoriIzvjestaj;
     public Button btnOdjava;
     public Label lblFrom,lblTo;
+
     public AdminController(Korisnik korisnik){
         admin=korisnik;
         inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
@@ -253,6 +250,25 @@ public class AdminController {
         ((Stage)((Node)actionEvent.getSource()).getScene().getWindow()).close();
         Main.otvoriLoginProzor(new Stage());
     }
+    public void editInspektor(ActionEvent actionEvent) throws IOException {
+        Stage createWindow = new Stage();
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/create_korisnik.fxml"),bundle);
+        loader.setController(new CreateKorisnikController(tblInspektori.getSelectionModel().getSelectedItem()));
+        createWindow.setTitle(bundle.getString("edit"));
+        createWindow.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,USE_COMPUTED_SIZE));
+        createWindow.show();
+        createWindow.setOnHiding((e)->{
+            CreateKorisnikController ctrl = loader.getController();
+            if(ctrl.isTrebaKreirati()){
+                KorisnikDAO.getInstance().azurirajInspektora(ctrl.getNoviKorisnik());
+            }
+        });
+    }
+    public void deleteInspektor(ActionEvent actionEvent){
+        KorisnikDAO.getInstance().obrisiInspektora(tblInspektori.getSelectionModel().getSelectedItem());
+        inspektori.removeIf(korisnik -> korisnik.getId()==tblInspektori.getSelectionModel().getSelectedItem().getId());
 
+    }
 
 }

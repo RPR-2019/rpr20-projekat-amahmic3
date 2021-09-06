@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <GridPane fx:id="root" hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-  <stylesheets><URL value="@/css/createKorisnik.css" /> </stylesheets>
+  <stylesheets><URL value="@/css/createFrom.css" /> </stylesheets>
     <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" />
     <ColumnConstraints halignment="CENTER" hgrow="NEVER" />
