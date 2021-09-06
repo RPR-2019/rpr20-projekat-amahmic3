@@ -23,7 +23,7 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
-
+!rpr20-projekat-amahmic3-1.0-SNAPSHOT-jar-with-dependencies.jar
 ##############################
 ## Gradle
 ##############################

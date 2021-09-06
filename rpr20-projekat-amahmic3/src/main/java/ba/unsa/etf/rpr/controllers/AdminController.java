@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -277,9 +278,17 @@ public class AdminController {
         });
     }
     public void deleteInspektor(ActionEvent actionEvent){
-        KorisnikDAO.getInstance().obrisiInspektora(tblInspektori.getSelectionModel().getSelectedItem());
-        inspektori.removeIf(korisnik -> korisnik.getId()==tblInspektori.getSelectionModel().getSelectedItem().getId());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(bundle.getString("brisanjeNaslov"));
+        alert.setHeaderText(bundle.getString("brisanjeHeader"));
+        alert.setContentText(bundle.getString("brisanjeFooter")+" "+tblInspektori.getSelectionModel().getSelectedItem().getIme()+" "+tblInspektori.getSelectionModel().getSelectedItem().getPrezime()+"?");
 
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            KorisnikDAO.getInstance().obrisiInspektora(tblInspektori.getSelectionModel().getSelectedItem());
+            inspektori.removeIf(korisnik -> korisnik.getId() == tblInspektori.getSelectionModel().getSelectedItem().getId());
+
+        }
     }
     public void setBA(ActionEvent actionEvent) throws IOException {
         Locale.setDefault(new Locale("bs", "BA"));
