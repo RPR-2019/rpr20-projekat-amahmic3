@@ -59,11 +59,11 @@
                 </Label>
                 <TableView fx:id="tblIzvjestaji" GridPane.columnSpan="3" GridPane.rowIndex="3" GridPane.rowSpan="2">
                     <columns>
-                        <TableColumn fx:id="rowID" minWidth="50.0" prefWidth="-1.0" text="ID" />
-                        <TableColumn fx:id="rowObrazovnaInstitucija" minWidth="63.0" prefWidth="148.0" text="%obrazovnaInstitucija" />
-                        <TableColumn fx:id="rowAdresaInstitucije" minWidth="72.0" prefWidth="123.0" text="%adresaInstitucije" />
-                        <TableColumn fx:id="rowPostanskiBroj" minWidth="63.0" prefWidth="148.0" text="%postanskiBroj" />
-                        <TableColumn fx:id="rowDatumInspekcije" minWidth="63.0" prefWidth="148.0" text="%datumInspekcije" />
+                        <TableColumn fx:id="rowID" maxWidth="1.7976931348623157E308" minWidth="50.0" prefWidth="-1.0" text="ID" />
+                        <TableColumn fx:id="rowObrazovnaInstitucija" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%obrazovnaInstitucija" />
+                        <TableColumn fx:id="rowAdresaInstitucije" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%adresaInstitucije" />
+                        <TableColumn fx:id="rowPostanskiBroj" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%postanskiBroj" />
+                        <TableColumn fx:id="rowDatumInspekcije" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="-1.0" text="%datumInspekcije" />
                     </columns>
                     <GridPane.margin>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

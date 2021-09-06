@@ -44,7 +44,6 @@ public class KorisnikDAO {
         upisiIzvjestajUpit = conn.prepareStatement("INSERT INTO Izvjestaj(inspektorID,obrazovnaInstitucijaID,izjavaPrvogSvjedokaID,izjavaDrugogSvjedokaID,Opis,DatumIVrijeme) VALUES" +
                 "(?,?,?,?,?,?)");
         dajObrazovnuInstituciju = conn.prepareStatement("SELECT ID FROM ObrazovnaInstitucija WHERE Adresa = ? AND PostanskiBroj = ?");
-
         dajIzvjestajeOdInspektoraUpit = conn.prepareStatement("SELECT ID,obrazovnaInstitucijaID,IzjavaPrvogSvjedokaID,IzjavaDrugogSvjedokaID,Opis,DatumIVrijeme FROM Izvjestaj WHERE inspektorID = ?");
         dajObrazovnuInstitucijuID = conn.prepareStatement("SELECT Naziv,Adresa,PostanskiBroj,BrojTelefona FROM ObrazovnaInstitucija WHERE ID = ?");
         dajIzjavuSvjedokaID= conn.prepareStatement("SELECT Ime,Prezime,Email,BrojTelefona,Izjava FROM IzjavaSvjedoka WHERE ID = ?");
@@ -52,10 +51,10 @@ public class KorisnikDAO {
         dajKorisnikaID = conn.prepareStatement("SELECT ime,prezime,brojTelefona,email,administrator,username,password,obrisan FROM Korisnik WHERE id = ?");
         dajBrojInspektora = conn.prepareStatement("SELECT COUNT(*) FROM Korisnik");
         obrazovnaInstitucijaSuggestion = conn.prepareStatement("SELECT ID, Naziv, Adresa, BrojTelefona, PostanskiBroj FROM ObrazovnaInstitucija WHERE Naziv LIKE ?");
-        emailPostoji = conn.prepareStatement("SELECT ID FROM Korisnik WHERE email LIKE ?");
-        telefonPostoji = conn.prepareStatement("SELECT ID FROM Korisnik WHERE brojTelefona LIKE ?");
-        dajIdOdKorisnika = conn.prepareStatement("SELECT ID FROM Korisnik WHERE username = ?");
-        dajUsernamoveKojiPocinju = conn.prepareStatement("SELECT username FROM Korisnik WHERE username LIKE ?");
+        emailPostoji = conn.prepareStatement("SELECT ID FROM Korisnik WHERE email LIKE ? AND obrisan=0");
+        telefonPostoji = conn.prepareStatement("SELECT ID FROM Korisnik WHERE brojTelefona LIKE ? AND obrisan=0");
+        dajIdOdKorisnika = conn.prepareStatement("SELECT ID FROM Korisnik WHERE username = ? AND obrisan =0");
+        dajUsernamoveKojiPocinju = conn.prepareStatement("SELECT username FROM Korisnik WHERE username LIKE ? AND obrisan = 0");
         azurirajInspektoraUpit = conn.prepareStatement("UPDATE Korisnik SET ime = ?, prezime = ?, brojTelefona = ?, email = ?, username = ?, password = ?, administrator =? WHERE ID = ?");
         obrisiInspektoraUpit= conn.prepareStatement("UPDATE Korisnik SET obrisan=1 WHERE ID=?");
     }

@@ -93,6 +93,7 @@ public class InspektorKontroler {
             if(ctrl.getTrebaKreirati()) {
                 Izvještaj izvještaj = ctrl.getIzvještaj();
                 KorisnikDAO.getInstance().upisiIzvjestaj(izvještaj);
+                izvjestaji.add(izvještaj);
             }
         });
     }
@@ -102,6 +103,7 @@ public class InspektorKontroler {
         btnProfil.getStyleClass().removeAll("buttonNotSelected");
         btnProfil.getStyleClass().removeAll("buttonHovered");
         btnIzvjestaji.getStyleClass().removeAll("buttonSelected");
+        btnIzvjestaji.getStyleClass().add("buttonNotSelected");
         btnProfil.getStyleClass().add("buttonSelected");
     }
     public  void prikaziIzvjestaje(ActionEvent actionEvent){
@@ -110,6 +112,7 @@ public class InspektorKontroler {
         btnIzvjestaji.getStyleClass().removeAll("buttonNotSelected");
         btnIzvjestaji.getStyleClass().removeAll("buttonHovered");
         btnProfil.getStyleClass().removeAll("buttonSelected");
+        btnProfil.getStyleClass().add("buttonNotSelected");
         btnIzvjestaji.getStyleClass().add("buttonSelected");
     }
     public void obojiUlaz(MouseEvent actionEvent){

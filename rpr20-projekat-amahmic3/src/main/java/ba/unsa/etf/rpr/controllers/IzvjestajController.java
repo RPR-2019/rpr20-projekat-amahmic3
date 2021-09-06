@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -315,15 +316,18 @@ public class IzvjestajController {
         return izvještaj;
     }
     public void exportIzvjestaj(ActionEvent actionEvent){
-        String path=new String(System.getProperty("user.home")+"\\Documents\\"+getIzvještaj().getObrazovnaInstitucija().getNaziv()+".pdf");
+        FileChooser fajl = new FileChooser();
+        fajl.setTitle("Save");
+        fajl.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF File","*.pdf"));
+        String path=new String(fajl.showSaveDialog(((Node)actionEvent.getTarget()).getScene().getWindow()).getAbsolutePath());
+        System.out.println(path);
         try {
             PdfWriter writer = new PdfWriter(path);
             PdfDocument pdfDocument = new PdfDocument(writer);
             pdfDocument.addNewPage();
 
             Document document = new Document(pdfDocument);
-            Paragraph paragraph = new Paragraph("Izvještaj");
-        //document.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA));
+            Paragraph paragraph = new Paragraph(bundle.getString("izvještaj"));
             document.add(paragraph.setFontSize(26).setTextAlignment(TextAlignment.CENTER));
             document.add(new Paragraph(bundle.getString("imeIPrezimeInspektora")+izvještaj.getInspektor().getIme()+" "+izvještaj.getInspektor().getPrezime()));
             document.add(new Paragraph(bundle.getString("brojTelefona")+izvještaj.getInspektor().getBrojTelefona()));
@@ -333,7 +337,7 @@ public class IzvjestajController {
             document.add(new Paragraph(bundle.getString("adresaInstitucije")+izvještaj.getObrazovnaInstitucija().getAdresa()));
             document.add(new Paragraph(bundle.getString("postanskiBroj")+izvještaj.getObrazovnaInstitucija().getPostanskiBroj()));
             document.add(new Paragraph(bundle.getString("brojTelefona")+izvještaj.getObrazovnaInstitucija().getBrojTelefona()));
-            document.add(new Paragraph(bundle.getString("izvjestaj")+izvještaj.getTekstIzvještaja()).setMarginTop(18));
+            document.add(new Paragraph(bundle.getString("izvjestaj")+": "+izvještaj.getTekstIzvještaja()).setMarginTop(18));
             document.add(new Paragraph(bundle.getString("prviSvjedok")).setMarginTop(20));
             upisiIzjavuSvjedoka(document,getIzvještaj().getPrvi());
             document.add(new Paragraph(bundle.getString("drugiSvjedok")).setMarginTop(20));
@@ -347,7 +351,7 @@ public class IzvjestajController {
     }
 
     private void upisiIzjavuSvjedoka(Document document,IzjavaSvjedoka izjava) {
-        document.add(new Paragraph(bundle.getString("imeIPrezime")+izjava.getSvjedok().getIme()+" "+izvještaj.getPrvi().getSvjedok().getPrezime()));
+        document.add(new Paragraph(bundle.getString("imeIPrezime")+izjava.getSvjedok().getIme()+" "+izjava.getSvjedok().getPrezime()));
         document.add(new Paragraph(bundle.getString("brojTelefona")+izjava.getSvjedok().getBrojTelefona()));
         document.add(new Paragraph(bundle.getString("email")+izjava.getSvjedok().getEmail()));
         document.add(new Paragraph(bundle.getString("izjavaSvjedoka")+": "+izjava.getTekstIzjave()));

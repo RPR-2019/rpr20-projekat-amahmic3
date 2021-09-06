@@ -1,12 +1,12 @@
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS "Korisnik" (
                                           "id"	INTEGER UNIQUE,
-                                          "username"	TEXT UNIQUE,
+                                          "username"	TEXT,
                                           "password"	TEXT,
                                           "ime"	TEXT,
                                           "prezime"	TEXT,
-                                          "email"	TEXT UNIQUE,
-                                          "brojTelefona"	TEXT UNIQUE,
+                                          "email"	TEXT,
+                                          "brojTelefona"	TEXT,
                                           "administrator"	INTEGER,
                                           "obrisan" INTEGER,
                                           PRIMARY KEY("id")

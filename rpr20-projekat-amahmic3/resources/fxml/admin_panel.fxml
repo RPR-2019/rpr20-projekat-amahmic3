@@ -57,12 +57,12 @@
             </Label>
             <TableView fx:id="tblReports" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" GridPane.rowSpan="2">
               <columns>
-                <TableColumn fx:id="rowIDIzvjestaja" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="rowObrazovnaInstitucija" prefWidth="75.0" text="%obrazovnaInstitucija" />
-                  <TableColumn fx:id="rowAdresaInstitucije" prefWidth="75.0" text="%adresaInstitucije" />
-                  <TableColumn fx:id="rowPostanskiBroj" prefWidth="75.0" text="%postanskiBroj" />
-                  <TableColumn fx:id="rowInspektor" prefWidth="75.0" text="%inspektor" />
-                  <TableColumn fx:id="rowDatumInspekcije" prefWidth="75.0" text="%datumInspekcije" />
+                <TableColumn fx:id="rowIDIzvjestaja" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="-1.0" text="ID" />
+                <TableColumn fx:id="rowObrazovnaInstitucija" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%obrazovnaInstitucija" />
+                  <TableColumn fx:id="rowAdresaInstitucije" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%adresaInstitucije" />
+                  <TableColumn fx:id="rowPostanskiBroj" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%postanskiBroj" />
+                  <TableColumn fx:id="rowInspektor" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%inspektor" />
+                  <TableColumn fx:id="rowDatumInspekcije" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="-1.0" text="%datumInspekcije" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
@@ -134,11 +134,11 @@
             </Label>
             <TableView fx:id="tblInspektori" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
               <columns>
-                  <TableColumn fx:id="rowID" minWidth="75.0" prefWidth="-1.0" text="ID" />
-                <TableColumn fx:id="rowIme" minWidth="75.0" prefWidth="-1.0" text="%ime" />
-                <TableColumn fx:id="rowPrezime" minWidth="75.0" prefWidth="-1.0" text="%prezime" />
-                  <TableColumn fx:id="rowUsername" minWidth="75.0" prefWidth="-1.0" text="%username" />
-                  <TableColumn fx:id="rowEmail" minWidth="50.0" prefWidth="-1.0" text="%email" />
+                  <TableColumn fx:id="rowID" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="-1.0" text="ID" />
+                <TableColumn fx:id="rowIme" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%ime" />
+                <TableColumn fx:id="rowPrezime" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%prezime" />
+                  <TableColumn fx:id="rowUsername" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%username" />
+                  <TableColumn fx:id="rowEmail" maxWidth="1.7976931348623157E308" minWidth="160.0" prefWidth="-1.0" text="%email" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
@@ -156,7 +156,7 @@
             </Label>
             <ButtonBar fx:id="barInspectorSelected" buttonMinWidth="100.0" prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
               <buttons>
-                <Button fx:id="btnEdit" onAction="#editInspektor" graphicTextGap="20.0" mnemonicParsing="false" text="%edit">
+                <Button fx:id="btnEdit" graphicTextGap="20.0" mnemonicParsing="false" onAction="#editInspektor" text="%edit">
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -165,7 +165,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnDelete" onAction="#deleteInspektor" mnemonicParsing="false" text="%delete">
+                  <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteInspektor" text="%delete">
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>

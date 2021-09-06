@@ -217,6 +217,7 @@ public class AdminController {
         btnInspektori.getStyleClass().removeAll("buttonHovered");
         btnIzvjestaji.getStyleClass().removeAll("buttonSelected");
         btnInspektori.getStyleClass().add("buttonSelected");
+        btnIzvjestaji.getStyleClass().add("buttonNotSelected");
     }
     public void prikaziIzvjestaje(ActionEvent actionEvent){
         odabraniButton = btnIzvjestaji;
@@ -226,6 +227,7 @@ public class AdminController {
         btnIzvjestaji.getStyleClass().removeAll("buttonHovered");
         btnInspektori.getStyleClass().removeAll("buttonSelected");
         btnIzvjestaji.getStyleClass().add("buttonSelected");
+        btnInspektori.getStyleClass().add("buttonNotSelected");
     }
     public void openCreateWindow(ActionEvent actionEvent) throws IOException {
         Stage createWindow = new Stage();
