@@ -160,7 +160,7 @@ public class KorisnikDAO {
             ResultSet rs = dajInspektoreUpit.executeQuery();
             while(rs.next()){
                 if(rs.getInt(9)!=1)
-                povratnaLista.add(new Korisnik(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),false,rs.getString(7),rs.getString(8)));
+                povratnaLista.add(new Korisnik(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getInt(6)==1,rs.getString(7),rs.getString(8)));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -294,12 +294,12 @@ public class KorisnikDAO {
         return povratna;
     }
     public  boolean postojiLiEmail(String email, int id){
-        boolean brMailova=true;
+        boolean brMailova=false;
         try {
             emailPostoji.setString(1,email);
             ResultSet rs =emailPostoji.executeQuery();
             if(rs.next() && rs.getInt(1)!=id){
-                brMailova=false;
+                brMailova=true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -307,11 +307,11 @@ public class KorisnikDAO {
         return brMailova;
     }
     public boolean postojiLiBrojTelefona(String brojTelefona, int id){
-        boolean telefonValidan=true;
+        boolean telefonValidan=false;
         try {
             telefonPostoji.setString(1,brojTelefona);
             ResultSet rs = telefonPostoji.executeQuery();
-            if(rs.next() && rs.getInt(1)!=id) telefonValidan=false;
+            if(rs.next() && rs.getInt(1)!=id) telefonValidan=true;
         } catch (SQLException e) {
             e.printStackTrace();
         }

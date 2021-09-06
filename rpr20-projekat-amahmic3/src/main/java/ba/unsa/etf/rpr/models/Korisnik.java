@@ -14,8 +14,6 @@ public class Korisnik {
     private SimpleStringProperty password = new SimpleStringProperty("");
     private SimpleBooleanProperty administrator= new SimpleBooleanProperty(false);
 
-
-
     public Korisnik(){
        id.setValue(0);
        ime.setValue("");
@@ -55,6 +53,7 @@ public class Korisnik {
     }
 
     public void setIme(String ime) {
+        if(ime!=null)
         this.ime.set(ime);
     }
 
@@ -67,6 +66,7 @@ public class Korisnik {
     }
 
     public void setPrezime(String prezime) {
+        if(prezime!=null)
         this.prezime.set(prezime);
     }
 
@@ -79,6 +79,7 @@ public class Korisnik {
     }
 
     public void setBrojTelefona(String brojTelefona) {
+        if(brojTelefona!=null)
         this.brojTelefona.set(brojTelefona);
     }
 
@@ -91,6 +92,7 @@ public class Korisnik {
     }
 
     public void setEmail(String email) {
+        if(email!=null)
         this.email.set(email);
     }
 
@@ -103,6 +105,7 @@ public class Korisnik {
     }
 
     public void setUsername(String username) {
+        if(username!=null)
         this.username.set(username);
     }
 
@@ -115,6 +118,7 @@ public class Korisnik {
     }
 
     public void setPassword(String password) {
+        if(password!=null)
         this.password.set(password);
     }
 

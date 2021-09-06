@@ -38,16 +38,16 @@ public class LoginController {
             }
         }
     }
-    private void uspjesanLogin(Korisnik korisnik) throws IOException {
+    public static void uspjesanLogin(Korisnik korisnik) throws IOException {
         Stage panel = new Stage();
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         FXMLLoader loader;
         if(korisnik.isAdministrator()) {
-            loader= new FXMLLoader(getClass().getResource("/fxml/admin_panel.fxml"), bundle);
+            loader= new FXMLLoader(LoginController.class.getResource("/fxml/admin_panel.fxml"), bundle);
             loader.setController(new AdminController(korisnik));
             panel.setTitle(bundle.getString("adminNaslov"));
         }else{
-            loader = new FXMLLoader(getClass().getResource("/fxml/inspektor_panel.fxml"),bundle);
+            loader = new FXMLLoader(LoginController.class.getResource("/fxml/inspektor_panel.fxml"),bundle);
             loader.setController(new InspektorKontroler(korisnik));
             panel.setTitle(bundle.getString("inspektorNaslov"));
         }

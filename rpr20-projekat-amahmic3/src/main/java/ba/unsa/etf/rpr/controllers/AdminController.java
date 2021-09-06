@@ -21,13 +21,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
 public class AdminController {
-    private Korisnik admin=null;
+    private Korisnik admin;
     public Button btnInspektori;
     private Button odabraniButton;
     public GridPane inspektoriPane;
@@ -63,13 +64,14 @@ public class AdminController {
     public Button btnOtvoriIzvjestaj;
     public Button btnOdjava;
     public Label lblFrom,lblTo;
-
+    public Button btnENLocalization, btnBALocalization;
+    private ResourceBundle bundle = ResourceBundle.getBundle("Translation");
     public AdminController(Korisnik korisnik){
         admin=korisnik;
         inspektori.addAll(KorisnikDAO.getInstance().dajSveInspektore());
         izvjestaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestaje());
-        listaOpcijaIzvjestaji.addAll("Naziv obrazovne institucije","Ime i prezime inspektora", "Datum inspekcije");
-        listaOpcijaInspektori.addAll("ID","Ime i prezime","Email adresa");
+        listaOpcijaIzvjestaji.addAll(bundle.getString("nazivInstitucije").replaceAll(": ",""),bundle.getString("imeIPrezimeInspektora").replaceAll(": ",""), bundle.getString("datumInspekcije"));
+        listaOpcijaInspektori.addAll("ID",bundle.getString("imeIPrezimeInspektora").replaceAll(": ",""),bundle.getString("email").replaceAll(": ",""));
 
     }
 
@@ -140,6 +142,13 @@ public class AdminController {
                     break;
             }
         });
+        if(Locale.getDefault().getCountry().matches("US")){
+            btnENLocalization.getStyleClass().add("buttonSelected");
+            btnBALocalization.getStyleClass().add("buttonNotSelected");
+        }else{
+            btnBALocalization.getStyleClass().add("buttonSelected");
+            btnENLocalization.getStyleClass().add("buttonNotSelected");
+        }
     }
 
     static void postaviFilterZaIzvjestaje(ChoiceBox<String> chBoxIzvjestaji, ObservableList<String> listaOpcijaIzvjestaji, DatePicker filterDateFrom,DatePicker filterDateTo, TextField fldIzvjestajiFilter, TableView<Izvještaj> tblReports, ObservableList<Izvještaj> izvjestaji, ObservableList<Izvještaj> pomocnaListaIzvjestaji,Label from,Label to) {
@@ -272,5 +281,17 @@ public class AdminController {
         inspektori.removeIf(korisnik -> korisnik.getId()==tblInspektori.getSelectionModel().getSelectedItem().getId());
 
     }
-
+    public void setBA(ActionEvent actionEvent) throws IOException {
+        Locale.setDefault(new Locale("bs", "BA"));
+        refresh();
+        ((Stage)((Node)actionEvent.getTarget()).getScene().getWindow()).close();
+    }
+    public void setEN(ActionEvent actionEvent) throws IOException {
+        Locale.setDefault(new Locale("en_US", "US"));
+        refresh();
+        ((Stage)((Node)actionEvent.getTarget()).getScene().getWindow()).close();
+    }
+    private void refresh() throws IOException {
+        LoginController.uspjesanLogin(admin);
+    }
 }

@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
@@ -44,10 +45,12 @@ public class InspektorKontroler {
     private ObservableList<String> listaOpcija = FXCollections.observableArrayList();
     private ObservableList<Izvještaj> pomocnaLista = FXCollections.observableArrayList();
     public  Label lblFrom,lblTo;
+    public Button btnENLocalization,btnBALocalization;
+    private ResourceBundle bundle = ResourceBundle.getBundle("Translation");
     public InspektorKontroler(Korisnik inspektor) {
         this.inspektor = inspektor;
         izvjestaji.addAll(KorisnikDAO.getInstance().dajSveIzvjestajeOdInspektora(inspektor));
-        listaOpcija.addAll("Naziv obrazovne institucije","Ime i prezime inspektora", "Datum inspekcije");
+        listaOpcija.addAll(bundle.getString("nazivInstitucije").replaceAll(": ",""),bundle.getString("imeIPrezimeInspektora").replaceAll(": ",""), bundle.getString("datumInspekcije"));
     }
     @FXML
     public void initialize(){
@@ -75,6 +78,13 @@ public class InspektorKontroler {
                 btnOpen.setDisable(true);
             }
         });
+        if(Locale.getDefault().getCountry().matches("US")){
+            btnENLocalization.getStyleClass().add("buttonSelected");
+            btnBALocalization.getStyleClass().add("buttonNotSelected");
+        }else{
+            btnBALocalization.getStyleClass().add("buttonSelected");
+            btnENLocalization.getStyleClass().add("buttonNotSelected");
+        }
     }
     public void odjaviSe(ActionEvent actionEvent) throws IOException {
         ((Stage)((Node)actionEvent.getSource()).getScene().getWindow()).close();
@@ -137,5 +147,19 @@ public class InspektorKontroler {
         createWindow.setTitle(bundle.getString("create"));
         createWindow.setScene(new Scene(loader.load(),USE_COMPUTED_SIZE,USE_COMPUTED_SIZE));
         createWindow.show();
+    }
+    public void setEN(ActionEvent actionEvent) throws IOException {
+        Locale.setDefault(new Locale("en_US", "US"));
+        refresh();
+        ((Stage)((Node)actionEvent.getTarget()).getScene().getWindow()).close();
+    }
+
+    public void setBA(ActionEvent actionEvent) throws IOException {
+        Locale.setDefault(new Locale("bs", "BA"));
+        refresh();
+        ((Stage)((Node)actionEvent.getTarget()).getScene().getWindow()).close();
+    }
+    private void refresh() throws IOException {
+        LoginController.uspjesanLogin(inspektor);
     }
 }

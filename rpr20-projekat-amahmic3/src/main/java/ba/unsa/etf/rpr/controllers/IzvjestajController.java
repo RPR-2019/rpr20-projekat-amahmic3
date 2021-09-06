@@ -182,6 +182,13 @@ public class IzvjestajController {
             });
             validacijskiListener(fldSati, this::validirajSate);
             validacijskiListener(fldMinute, this::validirajMinute);
+            fldMinute.textProperty().addListener((obs,stari,novi)->{
+                if(!validirajMinute(novi)){
+                    btnCreate.setDisable(false);
+                }else{
+                    btnCreate.setDisable(true);
+                }
+            });
         }
     }
 
@@ -327,7 +334,7 @@ public class IzvjestajController {
             pdfDocument.addNewPage();
 
             Document document = new Document(pdfDocument);
-            Paragraph paragraph = new Paragraph(bundle.getString("izvještaj"));
+            Paragraph paragraph = new Paragraph(bundle.getString("izvjestaj"));
             document.add(paragraph.setFontSize(26).setTextAlignment(TextAlignment.CENTER));
             document.add(new Paragraph(bundle.getString("imeIPrezimeInspektora")+izvještaj.getInspektor().getIme()+" "+izvještaj.getInspektor().getPrezime()));
             document.add(new Paragraph(bundle.getString("brojTelefona")+izvještaj.getInspektor().getBrojTelefona()));

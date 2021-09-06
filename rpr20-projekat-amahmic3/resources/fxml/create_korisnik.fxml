@@ -107,8 +107,8 @@
       </PasswordField>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
         <buttons>
-          <Button fx:id="btnCreate" defaultButton="true" mnemonicParsing="false" onAction="#kreirajKorisnika" text="%create" />
-            <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#cancelKreiranje" text="%cancel" />
+          <Button fx:id="btnCreate"  mnemonicParsing="false" onAction="#kreirajKorisnika" text="%create" />
+            <Button fx:id="btnCancel"  mnemonicParsing="false" onAction="#cancelKreiranje" text="%cancel" prefWidth="-1" />
         </buttons>
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

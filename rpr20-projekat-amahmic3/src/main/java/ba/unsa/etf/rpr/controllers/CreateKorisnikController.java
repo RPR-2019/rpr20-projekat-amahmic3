@@ -30,7 +30,7 @@ public class CreateKorisnikController {
     private boolean trebaKreirati = false;
     private boolean edit = false;
     private final ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-    private boolean validirajEmail(String email){
+    private  boolean validirajEmail(String email){
         return !EmailValidator.getInstance().isValid(email) || KorisnikDAO.getInstance().postojiLiEmail(email,noviKorisnik.getId());
     }
 
@@ -51,7 +51,7 @@ public class CreateKorisnikController {
         onChangeListener(fldBrojTelefona);
         onChangeListener(fldUsername);
         onChangeListener(fldPassword);
-
+        chBoxAdministrator.selectedProperty().bindBidirectional(noviKorisnik.administratorProperty());
         fldIme.textProperty().bindBidirectional(noviKorisnik.imeProperty());
         fldPrezime.textProperty().bindBidirectional(noviKorisnik.prezimeProperty());
         fldEmail.textProperty().bindBidirectional(noviKorisnik.emailProperty());
@@ -61,7 +61,7 @@ public class CreateKorisnikController {
 
         validacijskiListener(fldIme, String::isEmpty);
         validacijskiListener(fldPrezime, String::isEmpty);
-        validacijskiListener(fldEmail, s-> !validirajEmail(s));
+        validacijskiListener(fldEmail, this::validirajEmail);
         validacijskiListener(fldBrojTelefona, this::validirajTelefon);
         validacijskiListener(fldUsername,s->!validirajUsername(s));
         validacijskiListener(fldPassword,String::isEmpty);
@@ -102,7 +102,7 @@ public class CreateKorisnikController {
          return KorisnikDAO.getInstance().provjeriUsername(username,noviKorisnik.getId()) && !username.isEmpty();
     }
     public boolean validirajTelefon(String brTelefona){
-        return !brTelefona.matches("[0-9]+") && !KorisnikDAO.getInstance().postojiLiBrojTelefona(brTelefona,noviKorisnik.getId());
+        return !brTelefona.matches("[0-9]+") || KorisnikDAO.getInstance().postojiLiBrojTelefona(brTelefona,noviKorisnik.getId());
     }
 
     public void validacijskiListener(TextField textField, Predicate<String> predikat)

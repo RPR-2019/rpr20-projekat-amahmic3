@@ -106,8 +106,8 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
             </DatePicker>
-            <Label fx:id="fldFrom" text="%from" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-            <Label fx:id="fldTo" text="%to" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Label fx:id="lblFrom" text="%from" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Label fx:id="lblTo" text="%to" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <GridPane fx:id="inspektoriPane" hgap="4.0" vgap="4.0" visible="false" GridPane.columnIndex="1" GridPane.rowSpan="3">
@@ -238,5 +238,14 @@
             </Button>
          </children>
       </VBox>
+      <ButtonBar buttonMinWidth="5.0" maxHeight="20.0" maxWidth="100.0" nodeOrientation="RIGHT_TO_LEFT" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+        <buttons>
+          <Button fx:id="btnENLocalization"  onAction="#setEN" mnemonicParsing="false" text="EN" />
+            <Button fx:id="btnBALocalization" onAction="#setBA" mnemonicParsing="false" text="BA" />
+        </buttons>
+         <GridPane.margin>
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+         </GridPane.margin>
+      </ButtonBar>
    </children>
 </GridPane>
