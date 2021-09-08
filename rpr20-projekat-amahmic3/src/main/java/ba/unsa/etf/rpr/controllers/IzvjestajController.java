@@ -4,11 +4,14 @@ import ba.unsa.etf.rpr.KorisnikDAO;
 import ba.unsa.etf.rpr.models.IzjavaSvjedoka;
 import ba.unsa.etf.rpr.models.Izvještaj;
 import ba.unsa.etf.rpr.models.Korisnik;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
+import com.sun.javafx.font.FontFactory;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.concurrent.Task;
@@ -329,8 +332,10 @@ public class IzvjestajController {
             PdfWriter writer = new PdfWriter(path);
             PdfDocument pdfDocument = new PdfDocument(writer);
             pdfDocument.addNewPage();
+            PdfFont pdfFont = PdfFontFactory.createFont("/font/Helvetica.ttf","Cp1250",true);
 
             Document document = new Document(pdfDocument);
+            document.setFont(pdfFont);
             Paragraph paragraph = new Paragraph(bundle.getString("izvjestaj"));
             document.add(paragraph.setFontSize(26).setTextAlignment(TextAlignment.CENTER));
             document.add(new Paragraph(bundle.getString("imeIPrezimeInspektora")+izvještaj.getInspektor().getIme()+" "+izvještaj.getInspektor().getPrezime()));

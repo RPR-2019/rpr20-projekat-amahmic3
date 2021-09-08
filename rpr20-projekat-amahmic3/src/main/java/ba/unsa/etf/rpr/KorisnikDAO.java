@@ -27,6 +27,7 @@ public class KorisnikDAO {
     private PreparedStatement dajUsernamoveKojiPocinju;
     private PreparedStatement azurirajInspektoraUpit;
     private PreparedStatement obrisiInspektoraUpit;
+    private PreparedStatement dajIDIzvještaja;
 
     public static KorisnikDAO getInstance() {
         if(instance==null){
@@ -57,6 +58,7 @@ public class KorisnikDAO {
         dajUsernamoveKojiPocinju = conn.prepareStatement("SELECT username FROM Korisnik WHERE username LIKE ? AND obrisan = 0");
         azurirajInspektoraUpit = conn.prepareStatement("UPDATE Korisnik SET ime = ?, prezime = ?, brojTelefona = ?, email = ?, username = ?, password = ?, administrator =? WHERE ID = ?");
         obrisiInspektoraUpit= conn.prepareStatement("UPDATE Korisnik SET obrisan=1 WHERE ID=?");
+        dajIDIzvještaja = conn.prepareStatement("SELECT MAX(ID) FROM Izvjestaj WHERE obrazovnaInstitucijaID = ?");
     }
     private KorisnikDAO(){
         try {
@@ -184,6 +186,12 @@ public class KorisnikDAO {
             upisiIzvjestajUpit.setString(5,izvještaj.getTekstIzvještaja());
             upisiIzvjestajUpit.setString(6,izvještaj.getDatumIzvještaja().toString());
             upisiIzvjestajUpit.executeUpdate();
+            dajIDIzvještaja.setInt(1,izvještaj.getObrazovnaInstitucija().getId());
+            rs = dajIDIzvještaja.executeQuery();
+            if(rs.next()) {
+                izvještaj.setId(rs.getInt(1));
+            }
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
