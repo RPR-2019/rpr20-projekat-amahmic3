@@ -2,6 +2,7 @@ package ba.unsa.etf.rpr;
 
 import ba.unsa.etf.rpr.models.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.*;
@@ -62,7 +63,9 @@ public class KorisnikDAO {
     }
     private KorisnikDAO(){
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite:"+System.getProperty("user.home")+"\\.rprProjekat\\projekat.db");
+            File fajl = new File(System.getProperty("user.home")+"\\.rprProjekat");
+            if(!fajl.exists()) fajl.mkdirs();
+            conn = DriverManager.getConnection("jdbc:sqlite:"+fajl.getAbsolutePath()+"\\projekat.db");
             spremiUpite();
         } catch (SQLException throwables) {
             regenerisiBazu();
@@ -72,6 +75,17 @@ public class KorisnikDAO {
                 e.printStackTrace();
                 System.out.println(System.getProperty("user.home"));
             }
+        }
+    }
+    public void vratiNaDefault(){
+        try {
+            conn.createStatement().executeUpdate("DELETE FROM Izvjestaj");
+            conn.createStatement().executeUpdate("DELETE FROM IzjavaSvjedoka");
+            conn.createStatement().executeUpdate("DELETE FROM ObrazovnaInstitucija");
+            conn.createStatement().executeUpdate("DELETE FROM Korisnik");
+            regenerisiBazu();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public Korisnik dajKorisnika(String username,String password){

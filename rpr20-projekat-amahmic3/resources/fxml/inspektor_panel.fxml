@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -81,7 +82,10 @@
                 <TextField fx:id="fldFilter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </GridPane.margin></TextField>
+               </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="sadržajFiltera" />
+               </tooltip></TextField>
                 <Button fx:id="btnOpen" graphicTextGap="10.0" mnemonicParsing="false" onAction="#otvoriIzvjestaj" text="%open" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
                     <graphic>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
@@ -93,11 +97,17 @@
                     <GridPane.margin>
                         <Insets bottom="8.0" left="4.0" right="4.0" top="4.0" />
                     </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%otvoriOdabraniIzvjestaj" />
+               </tooltip>
                 </Button>
             <ChoiceBox fx:id="chbFilteri" prefWidth="100.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%odaberiKriterijFiltera" />
+               </tooltip>
             </ChoiceBox>
             <Button graphicTextGap="10.0" mnemonicParsing="false" onAction="#kreirajIzvjestaj" text="%kreirajIzvjestaj" GridPane.columnIndex="2">
                <graphic>
@@ -110,6 +120,9 @@
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%kreirajNoviIzvjestaj" />
+               </tooltip>
             </Button>
             <DatePicker fx:id="filterPrviDatum" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
@@ -146,6 +159,9 @@
                     <padding>
                         <Insets left="50.0" />
                     </padding>
+               <tooltip>
+                  <Tooltip text="%korisniciPanel" />
+               </tooltip>
                 </Button>
                 <Button fx:id="btnIzvjestaji" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onAction="#prikaziIzvjestaje" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%izvjestaji">
                     <graphic>
@@ -158,6 +174,9 @@
                     <padding>
                         <Insets left="50.0" />
                     </padding>
+               <tooltip>
+                  <Tooltip text="%izvjestajPanel" />
+               </tooltip>
                 </Button>
                 <Button fx:id="btnOdjava" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onAction="#odjaviSe" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%odjava">
                     <graphic>
@@ -170,6 +189,9 @@
                     <padding>
                         <Insets left="50.0" />
                     </padding>
+               <tooltip>
+                  <Tooltip text="%odjaviSe" />
+               </tooltip>
                 </Button>
             </children>
         </VBox>
@@ -266,8 +288,14 @@
       </GridPane>
       <ButtonBar buttonMinWidth="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="20.0" prefWidth="100.0" GridPane.halignment="LEFT" GridPane.rowIndex="5" GridPane.valignment="BOTTOM">
         <buttons>
-          <Button fx:id="btnENLocalization" mnemonicParsing="false" onAction="#setEN" text="EN" />
-            <Button fx:id="btnBALocalization" mnemonicParsing="false" onAction="#setBA" text="BA" />
+          <Button fx:id="btnENLocalization" mnemonicParsing="false" onAction="#setEN" text="EN">
+               <tooltip>
+                  <Tooltip text="%engleskiJezik" />
+               </tooltip></Button>
+            <Button fx:id="btnBALocalization" mnemonicParsing="false" onAction="#setBA" text="BA">
+               <tooltip>
+                  <Tooltip text="%bosanskiJezik" />
+               </tooltip></Button>
         </buttons>
          <GridPane.margin>
             <Insets bottom="8.0" left="4.0" right="4.0" top="4.0" />

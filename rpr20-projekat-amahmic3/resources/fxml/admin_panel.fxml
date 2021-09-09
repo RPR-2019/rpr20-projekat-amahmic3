@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -47,7 +48,7 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="%izvjestaji" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+            <Label fx:id="lblReports" text="%izvjestaji" GridPane.halignment="LEFT" GridPane.valignment="TOP">
                <font>
                   <Font size="20.0" />
                </font>
@@ -79,7 +80,10 @@
             <TextField fx:id="fldIzvjestajiFilter" maxHeight="-Infinity" maxWidth="1000000.0" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </GridPane.margin></TextField>
+               </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%sadrzajFiltera" />
+               </tooltip></TextField>
             <Button fx:id="btnOtvoriIzvjestaj" mnemonicParsing="false" onAction="#otvoriIzvjestaj" text="%open" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
@@ -91,11 +95,17 @@
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%otvoriOdabraniIzvjestaj" />
+               </tooltip>
             </Button>
             <ChoiceBox fx:id="chBoxIzvjestaji" maxWidth="150.0" minWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </GridPane.margin></ChoiceBox>
+               </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%odaberiKriterijFiltera" />
+               </tooltip></ChoiceBox>
             <DatePicker fx:id="filterPrviDate" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
@@ -148,6 +158,9 @@
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%sadrzajFiltera" />
+               </tooltip>
             </TextField>
             <Label text="%filter" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
@@ -164,6 +177,9 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <tooltip>
+                        <Tooltip text="%izmijeniOdabranogKorisnika" />
+                     </tooltip>
                   </Button>
                   <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteInspektor" text="%delete">
                      <graphic>
@@ -173,13 +189,16 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <tooltip>
+                        <Tooltip text="%obrisiOdabranogKorisnika" />
+                     </tooltip>
                   </Button>
               </buttons>
                <GridPane.margin>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </GridPane.margin>
             </ButtonBar>
-            <Button fx:id="btnCreate" alignment="TOP_RIGHT" graphicTextGap="20.0" minWidth="111.0" mnemonicParsing="false" onAction="#openCreateWindow" text="%create" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+            <Button fx:id="btnCreateKorisnik" alignment="TOP_RIGHT" graphicTextGap="20.0" minWidth="111.0" mnemonicParsing="false" onAction="#openCreateWindow" text="%create" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -190,11 +209,17 @@
                <GridPane.margin>
                   <Insets bottom="8.0" right="4.0" top="4.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%kreirajNovogKorisnika" />
+               </tooltip>
             </Button>
             <ChoiceBox fx:id="chBoxInspektori" maxWidth="100.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="%odaberiKriterijFiltera" />
+               </tooltip>
             </ChoiceBox>
          </children>
       </GridPane>
@@ -211,6 +236,9 @@
                <padding>
                   <Insets left="50.0" />
                </padding>
+               <tooltip>
+                  <Tooltip text="%korisniciPanel" />
+               </tooltip>
             </Button>
             <Button fx:id="btnIzvjestaji" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onAction="#prikaziIzvjestaje" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%izvjestaji">
                <graphic>
@@ -223,6 +251,9 @@
                <padding>
                   <Insets left="50.0" />
                </padding>
+               <tooltip>
+                  <Tooltip text="%izvjestajPanel" />
+               </tooltip>
             </Button>
             <Button fx:id="btnOdjava" alignment="BASELINE_LEFT" graphicTextGap="20.0" mnemonicParsing="false" onAction="#odjaviSe" onMouseEntered="#obojiUlaz" onMouseExited="#obojiIzlaz" prefHeight="40.0" prefWidth="250.0" styleClass="buttonNotSelected" text="%odjava">
                <graphic>
@@ -235,13 +266,22 @@
                <padding>
                   <Insets left="50.0" />
                </padding>
+               <tooltip>
+                  <Tooltip text="%odjaviSe" />
+               </tooltip>
             </Button>
          </children>
       </VBox>
       <ButtonBar buttonMinWidth="5.0" maxHeight="20.0" maxWidth="100.0" nodeOrientation="RIGHT_TO_LEFT" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
         <buttons>
-          <Button fx:id="btnENLocalization"  onAction="#setEN" mnemonicParsing="false" text="EN" />
-            <Button fx:id="btnBALocalization" onAction="#setBA" mnemonicParsing="false" text="BA" />
+          <Button fx:id="btnENLocalization" mnemonicParsing="false" onAction="#setEN" text="EN">
+               <tooltip>
+                  <Tooltip text="%engleskiJezik" />
+               </tooltip></Button>
+            <Button fx:id="btnBALocalization" mnemonicParsing="false" onAction="#setBA" text="BA">
+               <tooltip>
+                  <Tooltip text="%bosanskiJezik" />
+               </tooltip></Button>
         </buttons>
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
