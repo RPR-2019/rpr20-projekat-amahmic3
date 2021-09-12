@@ -79,6 +79,7 @@ public class IzvjestajController {
     }
     @FXML
     void initialize(){
+        btnCreate.setDisable(true);
         fldNazivInstitucije.textProperty().bindBidirectional(izvještaj.getObrazovnaInstitucija().nazivProperty());
         fldAdresaInstitucije.textProperty().bindBidirectional(izvještaj.getObrazovnaInstitucija().adresaProperty());
         fldTelefonInstitucije.textProperty().bindBidirectional(izvještaj.getObrazovnaInstitucija().brojTelefonaProperty());
@@ -129,6 +130,7 @@ public class IzvjestajController {
             onChangeListener(fldEmailDrugog);
             onChangeListener(fldBrojDrugog);
             onChangeListener(fldIzjavaDrugog);
+            onChangeListener(fldSati);
             fldNazivInstitucije.textProperty().addListener((obs, stari, novi) -> {
                 if (novi.length() >= 3) {
                     fldSuggestionMenu.getItems().clear();

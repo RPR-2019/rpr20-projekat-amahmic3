@@ -114,6 +114,7 @@
                             <mainClass>ba.unsa.etf.rpr.Main</mainClass>
                         </manifest>
                     </archive>
+
                 </configuration>
             </plugin>
 

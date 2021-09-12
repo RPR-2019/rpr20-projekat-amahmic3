@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class KorisnikDAO {
@@ -105,7 +106,7 @@ public class KorisnikDAO {
     }
     private void regenerisiBazu(){
         try {
-            Scanner citac = new Scanner(new FileInputStream("Projekat.sql"));
+            Scanner citac = new Scanner((Objects.requireNonNull(this.getClass().getResourceAsStream("/Projekat.sql"))));
             StringBuilder upit=new StringBuilder("");
             while(citac.hasNextLine()){
                 upit.append(citac.nextLine());
@@ -114,7 +115,7 @@ public class KorisnikDAO {
                     upit.setLength(0);
                 }
             }
-        } catch (FileNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -164,7 +165,7 @@ public class KorisnikDAO {
             if(rs.next()){
                 inspektor.setId(rs.getInt(1));
             }else{
-                throw new Exception("Hairs");
+                throw new Exception();
             }
         }catch (Exception e){
             e.printStackTrace();

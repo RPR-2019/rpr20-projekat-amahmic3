@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS "ObrazovnaInstitucija" (
                                                       "Naziv"	TEXT,
                                                       "Adresa"	TEXT,
                                                       "PostanskiBroj"	TEXT,
-                                                      "BrojTelefona"	TEXT UNIQUE,
+                                                      "BrojTelefona"	TEXT,
                                                       PRIMARY KEY("ID")
     );
 CREATE TABLE IF NOT EXISTS "Izvjestaj" (
